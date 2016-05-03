@@ -1,0 +1,6 @@
+vendor
+composer.lock
+
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+

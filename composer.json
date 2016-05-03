@@ -1,0 +1,10 @@
+{
+  "require": {
+    "firebase/php-jwt": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Teste\\": "src/"
+    }
+  }
+}
