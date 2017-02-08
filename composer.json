@@ -1,5 +1,5 @@
 {
-  "name": "byjg/jwtwrapper",
+  "name": "byjg/jwt-wrapper",
   "description": "A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component",
   "autoload": {
     "psr-4": {
