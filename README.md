@@ -1,4 +1,5 @@
 # Wrapper for Firebase/Jwt
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/?branch=master)
 
 A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component
 
