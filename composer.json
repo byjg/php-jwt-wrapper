@@ -1,10 +1,13 @@
 {
-  "require": {
-    "firebase/php-jwt": "^3.0"
-  },
+  "name": "byjg/jwtwrapper",
+  "description": "A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component",
   "autoload": {
     "psr-4": {
-      "Teste\\": "src/"
+      "ByJG\\Util\\": "src/"
     }
+  },
+  "license": "MIT",
+  "require": {
+    "firebase/php-jwt": "^3.0"
   }
 }

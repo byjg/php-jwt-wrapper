@@ -10,7 +10,7 @@ teste.doLogin = function() {
     }).fail(function(){
         alert('error');
     });
-}
+};
 
 teste.callApi = function () {
     $.ajax({
@@ -22,8 +22,14 @@ teste.callApi = function () {
         success: function(data) {
             console.log('OK: '  + data);
         },
-        error: function() {
-            alert('error');
+        error: function(data) {
+            console.log('ERROR: ' + data.responseText);
         }
     });
-}
+};
+
+teste.doLogout = function() {
+    store.clearJWT();
+    console.log('Logged out');
+};
+

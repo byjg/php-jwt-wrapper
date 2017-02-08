@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Teste Jwt</title>
-    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script src="//code.jquery.com/jquery-2.2.3.min.js"></script>
     <script src="js/store.js"></script>
     <script src="js/site.js"></script>
 </head>
@@ -20,12 +20,19 @@
             e.preventDefault();
             teste.callApi();
         });
+
+        $("#btnLogout").click(function(e){
+            e.preventDefault();
+            teste.doLogout();
+        });
     });
 </script>
 
 <input id="btnLogin" type="button" value="Login"  /><br/>
 
-<input id="btnCallApi" type="button" value="Chamar Api!"  /><br/>
+<input id="btnCallApi" type="button" value="Call to API"  /><br/>
+
+<input id="btnLogout" type="button" value="Logout"  /><br/>
 
 </body>
 </html>
