@@ -36,6 +36,23 @@ Private      (JwtWrapper::extractData)
 Resource
 ```
 
+## Create your Jwt Secret Key
+
+### Good
+
+```
+openssl rand -base64 32
+```
+
+### Harder
+
+```
+openssl rand -base64 64
+```
+
+**Note**: Do not forget do run base64_decode before pass to JwtWrapper
+
+
 ## Running a sample test
 
 Start a local server:
