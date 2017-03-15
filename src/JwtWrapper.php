@@ -31,7 +31,7 @@ class JwtWrapper
         $issuedAt   = time();
         $notBefore  = $issuedAt + $secondsNotBefore;          //Adding 10 seconds
         $expire     = $notBefore + $secondsExpire;            // Adding 60 seconds
-        $serverName = $this->secretKey;                       // Retrieve the server name from config file
+        $serverName = $this->serverName;                       // Retrieve the server name from config file
 
         /*
          * Create the token as an array
