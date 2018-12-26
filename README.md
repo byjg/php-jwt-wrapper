@@ -1,10 +1,10 @@
-# Wrapper for Firebase/Jwt
+# Jwt-Wrapper for Firebase Jwt
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/?branch=master)
 
 A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component
 
 
-## How it works
+# How it works
 
 This library is intented to be located at server side. 
 
@@ -36,15 +36,15 @@ Private      (JwtWrapper::extractData)
 Resource
 ```
 
-## Create your Jwt Secret Key
+# Create your Jwt Secret Key
 
-### Good
+## Good
 
 ```
 openssl rand -base64 32
 ```
 
-### Harder
+## Harder
 
 ```
 openssl rand -base64 64
@@ -53,7 +53,7 @@ openssl rand -base64 64
 **Note**: Do not forget do run base64_decode before pass to JwtWrapper
 
 
-## Running a sample test
+# Running a sample test
 
 Start a local server:
 
