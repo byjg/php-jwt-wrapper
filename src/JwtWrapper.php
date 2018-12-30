@@ -6,17 +6,23 @@ use Firebase\JWT\JWT;
 
 class JwtWrapper
 {
-    // Algorithm used to sign the token
-    // @see https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
-    const CRYPTO_ALGHORITM = 'HS512';
 
+    protected $cryptoAlghoritm;
     protected $secretKey;
+    protected $publicKey;
     protected $serverName;
 
-    public function __construct($serverName, $secretKey)
+    public function __construct($serverName, $secretKey, $publicKey = null)
     {
         $this->serverName = $serverName;
-        $this->secretKey = $secretKey;
+        $this->secretKey = base64_decode($secretKey);
+        $this->publicKey = $this->secretKey;
+        $this->cryptoAlghoritm = 'HS512';
+        if (!empty($publicKey)) {
+            $this->cryptoAlghoritm = 'RS512';
+            $this->secretKey = $secretKey;
+            $this->publicKey = $publicKey;
+        }
     }
 
     /**
@@ -48,8 +54,6 @@ class JwtWrapper
 
     public function generateToken($jwtData)
     {
-        $secretKey = base64_decode($this->secretKey);
-
         /*
          * Encode the array to a JWT string.
          * Second parameter is the key to encode the token.
@@ -58,8 +62,8 @@ class JwtWrapper
          */
         $jwt = JWT::encode(
             $jwtData,      //Data to be encoded in the JWT
-            $secretKey, // The signing key
-            JwtWrapper::CRYPTO_ALGHORITM
+            $this->secretKey, // The signing key
+            $this->cryptoAlghoritm
         );
 
         return $jwt;
@@ -86,12 +90,11 @@ class JwtWrapper
             $bearer = $this->getAuthorizationBearer();
         }
 
-        $secretKey = base64_decode($this->secretKey);
         $jwtData = JWT::decode(
             $bearer,
-            $secretKey,
+            $this->publicKey,
             [
-                JwtWrapper::CRYPTO_ALGHORITM
+                $this->cryptoAlghoritm
             ]
         );
 

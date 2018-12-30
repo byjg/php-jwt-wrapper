@@ -3,7 +3,7 @@
 use ByJG\Util\JwtWrapper;
 use PHPUnit\Framework\TestCase;
 
-class JwtWrapperTest extends TestCase
+class JwtWrapperHashTest extends TestCase
 {
 
     /**
@@ -13,10 +13,14 @@ class JwtWrapperTest extends TestCase
 
     protected $dataToToken = ["name" => "John", "id"=>"1"];
     protected $server = "example.com";
-    protected $secret = "secrect_key_for_test";
+    protected $secret;
+    protected $public;
 
     protected function setUp()
     {
+        $this->secret = base64_encode("secrect_key_for_test");
+        $this->public = null;
+
         unset($_SERVER["HTTP_AUTHORIZATION"]);
         $this->object = new JwtWrapper($this->server, $this->secret);
     }
@@ -103,7 +107,7 @@ class JwtWrapperTest extends TestCase
         $jwt = $this->object->createJwtData($this->dataToToken);
         $token = $this->object->generateToken($jwt);
 
-        $jwtWrapper = new JwtWrapper("otherserver.com", $this->secret);
+        $jwtWrapper = new JwtWrapper("otherserver.com", $this->secret, $this->public);
 
         $jwtWrapper->extractData($token);
     }
@@ -117,7 +121,7 @@ class JwtWrapperTest extends TestCase
         $jwt = $this->object->createJwtData($this->dataToToken);
         $token = $this->object->generateToken($jwt);
 
-        $jwtWrapper = new JwtWrapper($this->server, "some_creepy_secret");
+        $jwtWrapper = new JwtWrapper($this->server, base64_encode("some_creepy_secret"));
 
         $jwtWrapper->extractData($token);
     }
