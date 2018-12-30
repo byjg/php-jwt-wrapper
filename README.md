@@ -140,6 +140,12 @@ $data = $jwtWrapper->extractData();
 $data = $jwtWrapper->extractData($token);
 ```
 
+# Install
+
+```bash
+composer require "byjg/jwt-wrapper=2.0.*"
+```
+
 # Running a sample test
 
 Start a local server:
