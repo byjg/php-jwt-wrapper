@@ -156,4 +156,22 @@ class JwtWrapperTest extends TestCase
     {
         $this->object->extractData();
     }
+
+    /**
+     * @throws \ByJG\Util\JwtWrapperException
+     * @expectedException UnexpectedValueException
+     */
+    public function testGetInvalidTokenSequence()
+    {
+        $this->object->extractData("invalidtoken");
+    }
+
+    /**
+     * @throws \ByJG\Util\JwtWrapperException
+     * @expectedException DomainException
+     */
+    public function testGetInvalidToken()
+    {
+        $this->object->extractData("invalidtoken.hasthree.parts");
+    }
 }
