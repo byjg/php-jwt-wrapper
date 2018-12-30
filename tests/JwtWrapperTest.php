@@ -124,15 +124,36 @@ class JwtWrapperTest extends TestCase
 
     /**
      * @throws \ByJG\Util\JwtWrapperException
+     * @expectedException \Firebase\JWT\ExpiredException
+     */
+    public function testExpiredToken()
+    {
+        $jwt = $this->object->createJwtData($this->dataToToken,1);
+        $token = $this->object->generateToken($jwt);
+
+        sleep(2);
+
+        $this->object->extractData($token);
+    }
+
+    /**
+     * @throws \ByJG\Util\JwtWrapperException
+     * @expectedException \Firebase\JWT\BeforeValidException
+     */
+    public function testNotBeforeToken()
+    {
+        $jwt = $this->object->createJwtData($this->dataToToken,60, 60);
+        $token = $this->object->generateToken($jwt);
+
+        $this->object->extractData($token);
+    }
+
+    /**
+     * @throws \ByJG\Util\JwtWrapperException
      * @expectedException \ByJG\Util\JwtWrapperException
      */
     public function testGetEmptyAuthorizationBearer()
     {
         $this->object->extractData();
-    }
-
-    public function testGenerateToken()
-    {
-
     }
 }

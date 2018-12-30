@@ -1,4 +1,6 @@
 # Jwt-Wrapper for Firebase Jwt
+
+[![Build Status](https://travis-ci.org/byjg/jwt-wrapper.svg?branch=master)](https://travis-ci.org/byjg/jwt-wrapper)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/?branch=master)
 
 A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component
