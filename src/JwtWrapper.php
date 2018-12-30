@@ -65,17 +65,21 @@ class JwtWrapper
         return $jwt;
     }
 
-    /*
-    * Extract the key, which is coming from the config file.
-    *
-    * Best suggestion is the key to be a binary string and
-    * store it in encoded in a config file.
-    *
-    * Can be generated with base64_encode(openssl_random_pseudo_bytes(64));
-    *
-    * keep it secure! You'll need the exact key to verify the
-    * token later.
-    */
+    /**
+     * Extract the key, which is coming from the config file.
+     *
+     * Best suggestion is the key to be a binary string and
+     * store it in encoded in a config file.
+     *
+     * Can be generated with base64_encode(openssl_random_pseudo_bytes(64));
+     *
+     * keep it secure! You'll need the exact key to verify the
+     * token later.
+     *
+     * @param null $bearer
+     * @return object
+     * @throws JwtWrapperException
+     */
     public function extractData($bearer = null)
     {
         if (empty($bearer)) {
@@ -91,16 +95,24 @@ class JwtWrapper
             ]
         );
 
+        if (isset($jwtData->iss) && $jwtData->iss != $this->serverName) {
+            throw new JwtWrapperException("Issuer does not match");
+        }
+
         return $jwtData;
     }
 
+    /**
+     * @return mixed
+     * @throws JwtWrapperException
+     */
     public function getAuthorizationBearer()
     {
         $authorization = isset($_SERVER['HTTP_AUTHORIZATION']) ? $_SERVER['HTTP_AUTHORIZATION'] : "";
         list($bearer) = sscanf($authorization, 'Bearer %s');
 
         if (empty($bearer)) {
-            throw new \Exception('Absent authorization token');
+            throw new JwtWrapperException('Absent authorization token');
         }
 
         return $bearer;
