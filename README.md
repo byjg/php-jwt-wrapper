@@ -1,5 +1,6 @@
 # Jwt-Wrapper for Firebase Jwt
 
+[![Opensource ByJG](https://img.shields.io/badge/opensource-byjg.com-brightgreen.svg)](http://opensource.byjg.com)
 [![Build Status](https://travis-ci.org/byjg/jwt-wrapper.svg?branch=master)](https://travis-ci.org/byjg/jwt-wrapper)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/?branch=master)
 
@@ -159,4 +160,7 @@ Access from you web browser the client.html
 ```
 http://localhost:8080/client.html
 ```
+
+----
+[Open source ByJG](http://opensource.byjg.com)
 
