@@ -13,16 +13,18 @@ class JwtWrapperHashTest extends TestCase
 
     protected $dataToToken = ["name" => "John", "id"=>"1"];
     protected $server = "example.com";
-    protected $secret;
-    protected $public;
+
+    /**
+     * @var \ByJG\Util\JwtKeyInterface
+     */
+    protected $jwtKey;
 
     protected function setUp()
     {
-        $this->secret = base64_encode("secrect_key_for_test");
-        $this->public = null;
+        $this->jwtKey = \ByJG\Util\JwtKeySecret::getInstance("secrect_key_for_test", false);
 
         unset($_SERVER["HTTP_AUTHORIZATION"]);
-        $this->object = new JwtWrapper($this->server, $this->secret);
+        $this->object = new JwtWrapper($this->server, $this->jwtKey);
     }
 
     protected function tearDown()
@@ -107,7 +109,7 @@ class JwtWrapperHashTest extends TestCase
         $jwt = $this->object->createJwtData($this->dataToToken);
         $token = $this->object->generateToken($jwt);
 
-        $jwtWrapper = new JwtWrapper("otherserver.com", $this->secret, $this->public);
+        $jwtWrapper = new JwtWrapper("otherserver.com", $this->jwtKey);
 
         $jwtWrapper->extractData($token);
     }
@@ -121,7 +123,7 @@ class JwtWrapperHashTest extends TestCase
         $jwt = $this->object->createJwtData($this->dataToToken);
         $token = $this->object->generateToken($jwt);
 
-        $jwtWrapper = new JwtWrapper($this->server, base64_encode("some_creepy_secret"));
+        $jwtWrapper = new JwtWrapper($this->server, new \ByJG\Util\JwtKeySecret("some_creepy_secret", true));
 
         $jwtWrapper->extractData($token);
     }

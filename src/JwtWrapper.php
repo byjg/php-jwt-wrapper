@@ -7,21 +7,26 @@ use Firebase\JWT\JWT;
 class JwtWrapper
 {
 
-    protected $cryptoAlghoritm;
-    protected $secretKey;
-    protected $publicKey;
     protected $serverName;
 
-    public function __construct($serverName, $secretKey, $publicKey = null)
+    /**
+     * @var JwtKeyInterface
+     */
+    protected $jwtKey;
+
+    /**
+     * JwtWrapper constructor.
+     * @param string $serverName
+     * @param JwtKeyInterface $jwtKey
+     * @throws JwtWrapperException
+     */
+    public function __construct($serverName, $jwtKey)
     {
         $this->serverName = $serverName;
-        $this->secretKey = base64_decode($secretKey);
-        $this->publicKey = $this->secretKey;
-        $this->cryptoAlghoritm = 'HS512';
-        if (!empty($publicKey)) {
-            $this->cryptoAlghoritm = 'RS512';
-            $this->secretKey = $secretKey;
-            $this->publicKey = $publicKey;
+        $this->jwtKey = $jwtKey;
+
+        if (!($jwtKey instanceof JwtKeyInterface)) {
+            throw new JwtWrapperException('Constructor needs to receive a JwtKeyInterface');
         }
     }
 
@@ -62,8 +67,8 @@ class JwtWrapper
          */
         $jwt = JWT::encode(
             $jwtData,      //Data to be encoded in the JWT
-            $this->secretKey, // The signing key
-            $this->cryptoAlghoritm
+            $this->jwtKey->getPrivateKey(), // The signing key
+            $this->jwtKey->getAlghoritm()
         );
 
         return $jwt;
@@ -92,9 +97,9 @@ class JwtWrapper
 
         $jwtData = JWT::decode(
             $bearer,
-            $this->publicKey,
+            $this->jwtKey->getPublicKey(),
             [
-                $this->cryptoAlghoritm
+                $this->jwtKey->getAlghoritm()
             ]
         );
 

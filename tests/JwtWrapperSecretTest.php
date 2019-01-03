@@ -6,9 +6,12 @@ require_once __DIR__ . '/JwtWrapperHashTest.php';
 
 class JwtWrapperSecretTest extends JwtWrapperHashTest
 {
+    /**
+     * @throws \ByJG\Util\JwtWrapperException
+     */
     protected function setUp()
     {
-        $this->secret = <<<TEXT
+        $private = <<<TEXT
 -----BEGIN RSA PRIVATE KEY-----
 MIIEpQIBAAKCAQEA5PMdWRa+rUJmg6QMNAPIXa+BJVN7W0vxPN3WTK/OIv5gxgmj
 2inHGGc6f90TW/to948LnqGtcD3CD9KsI55MubafwBYjcds1o9opZ0vYwwdIV80c
@@ -37,8 +40,7 @@ GOl+GViVuDHUNQvURLn+6gg4tAemYlob912xIPaU44+lZzTMHBOJBGMJKi8WogKi
 V5+cz9l31uuAgNfjL63jZPaAzKs8Zx6R3O5RuezympwijCIGWILbO2Q=
 -----END RSA PRIVATE KEY-----
 TEXT;
-
-        $this->public = <<<TEXT
+        $public = <<<TEXT
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5PMdWRa+rUJmg6QMNAPI
 Xa+BJVN7W0vxPN3WTK/OIv5gxgmj2inHGGc6f90TW/to948LnqGtcD3CD9KsI55M
@@ -49,9 +51,11 @@ JW1WcLlAAIaAfABtSZboznsStMnYto01wVknXKyERFs7FLHYqKQANIvRhFTptseh
 owIDAQAB
 -----END PUBLIC KEY-----
 TEXT;
-;
+
+        $this->jwtKey = new \ByJG\Util\JwtRsaKey($private, $public);
+
         unset($_SERVER["HTTP_AUTHORIZATION"]);
-        $this->object = new JwtWrapper($this->server, $this->secret, $this->public);
+        $this->object = new JwtWrapper($this->server, $this->jwtKey);
     }
 
 
@@ -64,7 +68,7 @@ TEXT;
         $jwt = $this->object->createJwtData($this->dataToToken);
         $token = $this->object->generateToken($jwt);
 
-        $secret = <<<TEXT
+        $private = <<<TEXT
 -----BEGIN RSA PRIVATE KEY-----
 MIIEpgIBAAKCAQEA9QTmRYW+S+9QeylWIz3cAMAjaIsJeO32/2IKYS54BBgd9xYp
 ByUUabiua8YvKwv5lmWv2P/llzUQz5ppU1nkiZljeofkEmxdxKTaLhX5Cd4WZteC
@@ -105,11 +109,8 @@ fQIDAQAB
 -----END PUBLIC KEY-----
 TEXT;
 
-
-        $jwtWrapper = new JwtWrapper($this->server, $secret, $public);
+        $jwtWrapper = new JwtWrapper($this->server, \ByJG\Util\JwtRsaKey::getInstance($private, $public));
 
         $jwtWrapper->extractData($token);
     }
-
-
 }
