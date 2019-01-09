@@ -6,17 +6,28 @@ use Firebase\JWT\JWT;
 
 class JwtWrapper
 {
-    // Algorithm used to sign the token
-    // @see https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
-    const CRYPTO_ALGHORITM = 'HS512';
 
-    protected $secretKey;
     protected $serverName;
 
-    public function __construct($serverName, $secretKey)
+    /**
+     * @var JwtKeyInterface
+     */
+    protected $jwtKey;
+
+    /**
+     * JwtWrapper constructor.
+     * @param string $serverName
+     * @param JwtKeyInterface $jwtKey
+     * @throws JwtWrapperException
+     */
+    public function __construct($serverName, $jwtKey)
     {
         $this->serverName = $serverName;
-        $this->secretKey = $secretKey;
+        $this->jwtKey = $jwtKey;
+
+        if (!($jwtKey instanceof JwtKeyInterface)) {
+            throw new JwtWrapperException('Constructor needs to receive a JwtKeyInterface');
+        }
     }
 
     /**
@@ -48,8 +59,6 @@ class JwtWrapper
 
     public function generateToken($jwtData)
     {
-        $secretKey = base64_decode($this->secretKey);
-
         /*
          * Encode the array to a JWT string.
          * Second parameter is the key to encode the token.
@@ -58,49 +67,60 @@ class JwtWrapper
          */
         $jwt = JWT::encode(
             $jwtData,      //Data to be encoded in the JWT
-            $secretKey, // The signing key
-            JwtWrapper::CRYPTO_ALGHORITM
+            $this->jwtKey->getPrivateKey(), // The signing key
+            $this->jwtKey->getAlghoritm()
         );
 
         return $jwt;
     }
 
-    /*
-    * Extract the key, which is coming from the config file.
-    *
-    * Best suggestion is the key to be a binary string and
-    * store it in encoded in a config file.
-    *
-    * Can be generated with base64_encode(openssl_random_pseudo_bytes(64));
-    *
-    * keep it secure! You'll need the exact key to verify the
-    * token later.
-    */
+    /**
+     * Extract the key, which is coming from the config file.
+     *
+     * Best suggestion is the key to be a binary string and
+     * store it in encoded in a config file.
+     *
+     * Can be generated with base64_encode(openssl_random_pseudo_bytes(64));
+     *
+     * keep it secure! You'll need the exact key to verify the
+     * token later.
+     *
+     * @param null $bearer
+     * @return object
+     * @throws JwtWrapperException
+     */
     public function extractData($bearer = null)
     {
         if (empty($bearer)) {
             $bearer = $this->getAuthorizationBearer();
         }
 
-        $secretKey = base64_decode($this->secretKey);
         $jwtData = JWT::decode(
             $bearer,
-            $secretKey,
+            $this->jwtKey->getPublicKey(),
             [
-                JwtWrapper::CRYPTO_ALGHORITM
+                $this->jwtKey->getAlghoritm()
             ]
         );
+
+        if (isset($jwtData->iss) && $jwtData->iss != $this->serverName) {
+            throw new JwtWrapperException("Issuer does not match");
+        }
 
         return $jwtData;
     }
 
+    /**
+     * @return mixed
+     * @throws JwtWrapperException
+     */
     public function getAuthorizationBearer()
     {
         $authorization = isset($_SERVER['HTTP_AUTHORIZATION']) ? $_SERVER['HTTP_AUTHORIZATION'] : "";
         list($bearer) = sscanf($authorization, 'Bearer %s');
 
         if (empty($bearer)) {
-            throw new \Exception('Absent authorization token');
+            throw new JwtWrapperException('Absent authorization token');
         }
 
         return $bearer;
