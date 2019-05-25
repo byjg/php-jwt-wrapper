@@ -13,17 +13,17 @@
     $(function() {
         $("#btnLogin").click(function(e) {
             e.preventDefault();
-            teste.doLogin();
+            app.doLogin();
         });
 
         $("#btnCallApi").click(function(e){
             e.preventDefault();
-            teste.callApi();
+            app.callApi();
         });
 
         $("#btnLogout").click(function(e){
             e.preventDefault();
-            teste.doLogout();
+            app.doLogout();
         });
     });
 </script>
@@ -33,6 +33,8 @@
 <input id="btnCallApi" type="button" value="Call to API"  /><br/>
 
 <input id="btnLogout" type="button" value="Logout"  /><br/>
+
+<div id="result"></div>
 
 </body>
 </html>

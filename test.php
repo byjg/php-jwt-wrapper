@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jg
- * Date: 03/05/16
- * Time: 15:20
- */
 
 //https://github.com/travist/jsencrypt
 

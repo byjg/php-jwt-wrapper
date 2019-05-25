@@ -1,18 +1,17 @@
-/**
- * Created by jg on 03/05/16.
- */
-var teste = teste || {};
+var app = app || {};
 
-teste.doLogin = function() {
+app.doLogin = function() {
+    var me = this;
     $.post('login.php', null, function(data){
         store.setJWT(data);
-        console.log('Logged in: ' + store.getJWT());
+        me.log('Logged in: ' + store.getJWT());
     }).fail(function(){
         alert('error');
     });
 };
 
-teste.callApi = function () {
+app.callApi = function () {
+    var me = this;
     $.ajax({
         url: 'api.php',
         beforeSend: function(request){
@@ -20,16 +19,19 @@ teste.callApi = function () {
         },
         type: 'GET',
         success: function(data) {
-            console.log('OK: '  + data);
+            me.log('OK: '  + data);
         },
         error: function(data) {
-            console.log('ERROR: ' + data.responseText);
+            me.log('ERROR: ' + data.responseText);
         }
     });
 };
 
-teste.doLogout = function() {
+app.doLogout = function() {
     store.clearJWT();
-    console.log('Logged out');
+    this.log('Logged out');
 };
 
+app.log = function(msg) {
+    document.getElementById("result").innerHTML += msg + "<br>";
+};

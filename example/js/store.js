@@ -1,6 +1,3 @@
-/**
- * Created by jg on 03/05/16.
- */
 var store = store || {};
 
 /*
