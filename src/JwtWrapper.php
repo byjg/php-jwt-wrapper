@@ -125,4 +125,9 @@ class JwtWrapper
 
         return $bearer;
     }
+
+    public static function generateSecret($bytes)
+    {
+        return base64_encode(openssl_random_pseudo_bytes($bytes));
+    }
 }
