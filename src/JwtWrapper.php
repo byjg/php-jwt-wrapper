@@ -130,4 +130,18 @@ class JwtWrapper
     {
         return base64_encode(openssl_random_pseudo_bytes($bytes));
     }
+    
+    /**
+     * @param int $seconds A value no more than few minutes (in seconds) e.g. 60
+     * @see: https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.4
+     */
+    public function setLeeway($seconds)
+    {
+        JWT::$leeway = $seconds;
+    }
+    
+    public function getLeeway
+    {
+        return JWT::$leeway;
+    }
 }
