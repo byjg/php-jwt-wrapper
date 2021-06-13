@@ -140,7 +140,7 @@ class JwtWrapper
         JWT::$leeway = $seconds;
     }
     
-    public function getLeeway
+    public function getLeeway()
     {
         return JWT::$leeway;
     }
