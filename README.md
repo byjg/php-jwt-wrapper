@@ -142,6 +142,19 @@ $data = $jwtWrapper->extractData();
 $data = $jwtWrapper->extractData($token);
 ```
 
+## Adding a Leeway
+
+You can add a leeway to account for when there is a clock skew times between
+the signing and verifying servers. It is recommended that this leeway should
+not be bigger than a few minutes.
+
+```php
+$jwtWrapper->setLeeway(60)
+```
+
+Important: Since the Firebase JWT class set the leeway value as a "static" property
+once you call the method above it will set up the same value to all JwtWrapper instances
+
 # Install
 
 ```bash
