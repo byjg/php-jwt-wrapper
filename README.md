@@ -1,7 +1,10 @@
 # Jwt-Wrapper for Firebase Jwt
 
-[![Opensource ByJG](https://img.shields.io/badge/opensource-byjg.com-brightgreen.svg)](http://opensource.byjg.com)
-[![Build Status](https://travis-ci.org/byjg/jwt-wrapper.svg?branch=master)](https://travis-ci.org/byjg/jwt-wrapper)
+[![Build Status](https://github.com/byjg/jwt-wrapper/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/byjg/jwt-wrapper/actions/workflows/phpunit.yml)
+[![Opensource ByJG](https://img.shields.io/badge/opensource-byjg-success.svg)](http://opensource.byjg.com)
+[![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/jwt-wrapper/)
+[![GitHub license](https://img.shields.io/github/license/byjg/jwt-wrapper.svg)](https://opensource.byjg.com/opensource/licensing.html)
+[![GitHub release](https://img.shields.io/github/release/byjg/jwt-wrapper.svg)](https://github.com/byjg/jwt-wrapper/releases/)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/?branch=master)
 
 A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component
@@ -177,4 +180,3 @@ http://localhost:8080/client.html
 
 ----
 [Open source ByJG](http://opensource.byjg.com)
-

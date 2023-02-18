@@ -9,7 +9,7 @@ class JwtWrapperSecretTest extends JwtWrapperHashTest
     /**
      * @throws \ByJG\Util\JwtWrapperException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $private = <<<TEXT
 -----BEGIN RSA PRIVATE KEY-----
@@ -59,12 +59,10 @@ TEXT;
     }
 
 
-    /**
-     * @throws \ByJG\Util\JwtWrapperException
-     * @expectedException \Firebase\JWT\SignatureInvalidException
-     */
     public function testTokenWrongSecret()
     {
+        $this->expectException(\Firebase\JWT\SignatureInvalidException::class);
+
         $jwt = $this->object->createJwtData($this->dataToToken);
         $token = $this->object->generateToken($jwt);
 
