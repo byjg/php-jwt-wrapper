@@ -9,16 +9,15 @@
 
 A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component
 
+## How it works
 
-# How it works
-
-This library is intented to be located at server side. 
+This library is intented to be located at server side.
 
 The flow is
 
 Without Token:
 
-```
+```text
          Request         Return 
          Token           Token
 CLIENT ---------->LOGIN----------->CLIENT
@@ -31,7 +30,7 @@ Token            Token              Locally
 
 With token
 
-```
+```text
                         Return the 
        Pass Token       API Result
 CLIENT ----------> API ----------->CLIENT
@@ -42,26 +41,26 @@ Private      (JwtWrapper::extractData)
 Resource
 ```
 
-# Create your Jwt Secret Key
+## Create your Jwt Secret Key
 
-You can use two type of secret keys. A Hash (HS512) that is faster, or a RSA (RS512) that is more secure. 
+You can use two type of secret keys. A Hash (HS512) that is faster, or a RSA (RS512) that is more secure.
 
-## Hash Key
+### Hash Key
 
-```
+```bash
 openssl rand -base64 64     # set here the size of your key
 ```
 
-## RSA
+### RSA
 
-```
+```bash
 ssh-keygen -t rsa -C "Jwt RSA Key" -b 2048 -f private.pem
 openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 ```
 
-**Note**: Save without password 
+**Note**: Save without password
 
-# Create JWT Token (Hash Encoding):
+## Create JWT Token (Hash Encoding)
 
 ```php
 <?php
@@ -76,7 +75,7 @@ $token = $jwtWrapper->createJwtData([
 ]);
 ```
 
-# Create JWT Token (RSA Encoding):
+## Create JWT Token (RSA Encoding)
 
 ```php
 <?php
@@ -134,7 +133,7 @@ $token = $jwtWrapper->createJwtData([
 ]);
 ```
 
-# Extracting
+## Extracting
 
 ```php
 <?php
@@ -145,7 +144,7 @@ $data = $jwtWrapper->extractData();
 $data = $jwtWrapper->extractData($token);
 ```
 
-## Adding a Leeway
+### Adding a Leeway
 
 You can add a leeway to account for when there is a clock skew times between
 the signing and verifying servers. It is recommended that this leeway should
@@ -158,23 +157,29 @@ $jwtWrapper->setLeeway(60)
 Important: Since the Firebase JWT class set the leeway value as a "static" property
 once you call the method above it will set up the same value to all JwtWrapper instances
 
-# Install
+## Install
 
 ```bash
-composer require "byjg/jwt-wrapper=2.0.*"
+composer require "byjg/jwt-wrapper=5.0.*"
 ```
 
-# Running a sample test
+## Running the tests
+
+```bash
+vendor/bin/phpunit
+```
+
+## Running a sample test
 
 Start a local server:
 
-```
+```bash
 php -S localhost:8080
 ```
 
 Access from you web browser the client.html
 
-```
+```bash
 http://localhost:8080/client.html
 ```
 
