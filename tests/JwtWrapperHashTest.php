@@ -1,6 +1,10 @@
 <?php
 
 use ByJG\Util\JwtWrapper;
+use ByJG\Util\JwtWrapperException;
+use Firebase\JWT\BeforeValidException;
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\SignatureInvalidException;
 use PHPUnit\Framework\TestCase;
 
 class JwtWrapperHashTest extends TestCase
@@ -19,7 +23,7 @@ class JwtWrapperHashTest extends TestCase
      */
     protected $jwtKey;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->jwtKey = \ByJG\Util\JwtKeySecret::getInstance("secrect_key_for_test", false);
 
@@ -27,7 +31,7 @@ class JwtWrapperHashTest extends TestCase
         $this->object = new JwtWrapper($this->server, $this->jwtKey);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->object = null;
         unset($_SERVER["HTTP_AUTHORIZATION"]);
@@ -100,12 +104,10 @@ class JwtWrapperHashTest extends TestCase
 
     }
 
-    /**
-     * @throws \ByJG\Util\JwtWrapperException
-     * @expectedException \ByJG\Util\JwtWrapperException
-     */
     public function testTokenWrongServerSameSecret()
     {
+        $this->expectException(JwtWrapperException::class);
+
         $jwt = $this->object->createJwtData($this->dataToToken);
         $token = $this->object->generateToken($jwt);
 
@@ -114,12 +116,10 @@ class JwtWrapperHashTest extends TestCase
         $jwtWrapper->extractData($token);
     }
 
-    /**
-     * @throws \ByJG\Util\JwtWrapperException
-     * @expectedException \Firebase\JWT\SignatureInvalidException
-     */
     public function testTokenWrongSecret()
     {
+        $this->expectException(SignatureInvalidException::class);
+
         $jwt = $this->object->createJwtData($this->dataToToken);
         $token = $this->object->generateToken($jwt);
 
@@ -128,12 +128,10 @@ class JwtWrapperHashTest extends TestCase
         $jwtWrapper->extractData($token);
     }
 
-    /**
-     * @throws \ByJG\Util\JwtWrapperException
-     * @expectedException \Firebase\JWT\ExpiredException
-     */
     public function testExpiredToken()
     {
+        $this->expectException(ExpiredException::class);
+
         $jwt = $this->object->createJwtData($this->dataToToken,1);
         $token = $this->object->generateToken($jwt);
 
@@ -142,42 +140,34 @@ class JwtWrapperHashTest extends TestCase
         $this->object->extractData($token);
     }
 
-    /**
-     * @throws \ByJG\Util\JwtWrapperException
-     * @expectedException \Firebase\JWT\BeforeValidException
-     */
     public function testNotBeforeToken()
     {
+        $this->expectException(BeforeValidException::class);
+
         $jwt = $this->object->createJwtData($this->dataToToken,60, 60);
         $token = $this->object->generateToken($jwt);
 
         $this->object->extractData($token);
     }
 
-    /**
-     * @throws \ByJG\Util\JwtWrapperException
-     * @expectedException \ByJG\Util\JwtWrapperException
-     */
     public function testGetEmptyAuthorizationBearer()
     {
+        $this->expectException(JwtWrapperException::class);
+
         $this->object->extractData();
     }
 
-    /**
-     * @throws \ByJG\Util\JwtWrapperException
-     * @expectedException UnexpectedValueException
-     */
     public function testGetInvalidTokenSequence()
     {
+        $this->expectException(UnexpectedValueException::class);
+
         $this->object->extractData("invalidtoken");
     }
 
-    /**
-     * @throws \ByJG\Util\JwtWrapperException
-     * @expectedException DomainException
-     */
     public function testGetInvalidToken()
     {
+        $this->expectException(DomainException::class);
+
         $this->object->extractData("invalidtoken.hasthree.parts");
     }
 }

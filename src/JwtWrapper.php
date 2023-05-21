@@ -3,6 +3,7 @@
 namespace ByJG\Util;
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class JwtWrapper
 {
@@ -97,10 +98,7 @@ class JwtWrapper
 
         $jwtData = JWT::decode(
             $bearer,
-            $this->jwtKey->getPublicKey(),
-            [
-                $this->jwtKey->getAlghoritm()
-            ]
+            new Key($this->jwtKey->getPublicKey(), $this->jwtKey->getAlghoritm())
         );
 
         if (isset($jwtData->iss) && $jwtData->iss != $this->serverName) {
