@@ -183,5 +183,14 @@ Access from you web browser the client.html
 http://localhost:8080/client.html
 ```
 
-----
+## Dependencies
+
+```mermaid  
+flowchart TD  
+    byjg/jwt-wrapper --> firebase/php-jwt
+    byjg/jwt-wrapper --> ext-openssl
+```
+
+----  
 [Open source ByJG](http://opensource.byjg.com)
+
