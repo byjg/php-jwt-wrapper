@@ -1,11 +1,10 @@
 # Jwt-Wrapper for Firebase Jwt
 
-[![Build Status](https://github.com/byjg/jwt-wrapper/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/byjg/jwt-wrapper/actions/workflows/phpunit.yml)
+[![Build Status](https://github.com/byjg/php-jwt-wrapper/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/byjg/php-jwt-wrapper/actions/workflows/phpunit.yml)
 [![Opensource ByJG](https://img.shields.io/badge/opensource-byjg-success.svg)](http://opensource.byjg.com)
-[![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/jwt-wrapper/)
-[![GitHub license](https://img.shields.io/github/license/byjg/jwt-wrapper.svg)](https://opensource.byjg.com/opensource/licensing.html)
-[![GitHub release](https://img.shields.io/github/release/byjg/jwt-wrapper.svg)](https://github.com/byjg/jwt-wrapper/releases/)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/?branch=master)
+[![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/php-jwt-wrapper/)
+[![GitHub license](https://img.shields.io/github/license/byjg/php-jwt-wrapper.svg)](https://opensource.byjg.com/opensource/licensing.html)
+[![GitHub release](https://img.shields.io/github/release/byjg/php-jwt-wrapper.svg)](https://github.com/byjg/php-jwt-wrapper/releases/)
 
 A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component
 
@@ -15,31 +14,40 @@ This library is intented to be located at server side.
 
 The flow is
 
-Without Token:
+### Without Token:
 
-```text
-         Request         Return 
-         Token           Token
-CLIENT ---------->LOGIN----------->CLIENT
-  |                 |                 |
-Without          Generate           Store
-Token            Token              Locally
-           (JwtWrapper::createJwtData)
-           (JwtWrapper::generateToken)
+```mermaid
+sequenceDiagram
+    participant LOCAL
+    participant CLIENT
+    participant SERVER
+    CLIENT->>SERVER: Request Token
+    SERVER->>CLIENT: Generate Token
+    CLIENT->>LOCAL: Store Token
 ```
 
-With token
+Generate Token:
+ * JwtWrapper::createJwtData
+ * JwtWrapper::generateToken
 
-```text
-                        Return the 
-       Pass Token       API Result
-CLIENT ----------> API ----------->CLIENT
-  |                 |                 
-Wants to       Validate and         
-Access         Extract Token        
-Private      (JwtWrapper::extractData)
-Resource
+
+### With token
+
+```mermaid
+sequenceDiagram
+    participant LOCAL
+    participant CLIENT
+    participant SERVER
+    participant PRIVATE_RESOURCE
+    LOCAL->>CLIENT: Retrieve Local Token
+    CLIENT->>SERVER: Pass Token
+    SERVER->>PRIVATE_RESOURCE: Validate Token
+    PRIVATE_RESOURCE->>CLIENT: Return Result if token is valid
+    CLIENT->>LOCAL: Store Token
 ```
+
+Validate Token:
+ * JwtWrapper::extractData
 
 ## Create your Jwt Secret Key
 
@@ -160,7 +168,7 @@ once you call the method above it will set up the same value to all JwtWrapper i
 ## Install
 
 ```bash
-composer require "byjg/jwt-wrapper=5.0.*"
+composer require "byjg/jwt-wrapper"
 ```
 
 ## Running the tests
