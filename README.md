@@ -1,67 +1,74 @@
 # Jwt-Wrapper for Firebase Jwt
 
-[![Build Status](https://github.com/byjg/jwt-wrapper/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/byjg/jwt-wrapper/actions/workflows/phpunit.yml)
+[![Build Status](https://github.com/byjg/php-jwt-wrapper/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/byjg/php-jwt-wrapper/actions/workflows/phpunit.yml)
 [![Opensource ByJG](https://img.shields.io/badge/opensource-byjg-success.svg)](http://opensource.byjg.com)
-[![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/jwt-wrapper/)
-[![GitHub license](https://img.shields.io/github/license/byjg/jwt-wrapper.svg)](https://opensource.byjg.com/opensource/licensing.html)
-[![GitHub release](https://img.shields.io/github/release/byjg/jwt-wrapper.svg)](https://github.com/byjg/jwt-wrapper/releases/)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/byjg/jwt-wrapper/?branch=master)
+[![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/php-jwt-wrapper/)
+[![GitHub license](https://img.shields.io/github/license/byjg/php-jwt-wrapper.svg)](https://opensource.byjg.com/opensource/licensing.html)
+[![GitHub release](https://img.shields.io/github/release/byjg/php-jwt-wrapper.svg)](https://github.com/byjg/php-jwt-wrapper/releases/)
 
 A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component
 
+## How it works
 
-# How it works
-
-This library is intented to be located at server side. 
+This library is intented to be located at server side.
 
 The flow is
 
-Without Token:
+### Without Token:
 
-```
-         Request         Return 
-         Token           Token
-CLIENT ---------->LOGIN----------->CLIENT
-  |                 |                 |
-Without          Generate           Store
-Token            Token              Locally
-           (JwtWrapper::createJwtData)
-           (JwtWrapper::generateToken)
-```
-
-With token
-
-```
-                        Return the 
-       Pass Token       API Result
-CLIENT ----------> API ----------->CLIENT
-  |                 |                 
-Wants to       Validate and         
-Access         Extract Token        
-Private      (JwtWrapper::extractData)
-Resource
+```mermaid
+sequenceDiagram
+    participant LOCAL
+    participant CLIENT
+    participant SERVER
+    CLIENT->>SERVER: Request Token
+    SERVER->>CLIENT: Generate Token
+    CLIENT->>LOCAL: Store Token
 ```
 
-# Create your Jwt Secret Key
+Generate Token:
+ * JwtWrapper::createJwtData
+ * JwtWrapper::generateToken
 
-You can use two type of secret keys. A Hash (HS512) that is faster, or a RSA (RS512) that is more secure. 
 
-## Hash Key
+### With token
 
+```mermaid
+sequenceDiagram
+    participant LOCAL
+    participant CLIENT
+    participant SERVER
+    participant PRIVATE_RESOURCE
+    LOCAL->>CLIENT: Retrieve Local Token
+    CLIENT->>SERVER: Pass Token
+    SERVER->>PRIVATE_RESOURCE: Validate Token
+    PRIVATE_RESOURCE->>CLIENT: Return Result if token is valid
+    CLIENT->>LOCAL: Store Token
 ```
+
+Validate Token:
+ * JwtWrapper::extractData
+
+## Create your Jwt Secret Key
+
+You can use two type of secret keys. A Hash (HS512) that is faster, or a RSA (RS512) that is more secure.
+
+### Hash Key
+
+```bash
 openssl rand -base64 64     # set here the size of your key
 ```
 
-## RSA
+### RSA
 
-```
+```bash
 ssh-keygen -t rsa -C "Jwt RSA Key" -b 2048 -f private.pem
 openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 ```
 
-**Note**: Save without password 
+**Note**: Save without password
 
-# Create JWT Token (Hash Encoding):
+## Create JWT Token (Hash Encoding)
 
 ```php
 <?php
@@ -76,7 +83,7 @@ $token = $jwtWrapper->createJwtData([
 ]);
 ```
 
-# Create JWT Token (RSA Encoding):
+## Create JWT Token (RSA Encoding)
 
 ```php
 <?php
@@ -134,7 +141,7 @@ $token = $jwtWrapper->createJwtData([
 ]);
 ```
 
-# Extracting
+## Extracting
 
 ```php
 <?php
@@ -145,7 +152,7 @@ $data = $jwtWrapper->extractData();
 $data = $jwtWrapper->extractData($token);
 ```
 
-## Adding a Leeway
+### Adding a Leeway
 
 You can add a leeway to account for when there is a clock skew times between
 the signing and verifying servers. It is recommended that this leeway should
@@ -158,25 +165,40 @@ $jwtWrapper->setLeeway(60)
 Important: Since the Firebase JWT class set the leeway value as a "static" property
 once you call the method above it will set up the same value to all JwtWrapper instances
 
-# Install
+## Install
 
 ```bash
-composer require "byjg/jwt-wrapper=2.0.*"
+composer require "byjg/jwt-wrapper"
 ```
 
-# Running a sample test
+## Running the tests
+
+```bash
+vendor/bin/phpunit
+```
+
+## Running a sample test
 
 Start a local server:
 
-```
+```bash
 php -S localhost:8080
 ```
 
 Access from you web browser the client.html
 
-```
+```bash
 http://localhost:8080/client.html
 ```
 
-----
+## Dependencies
+
+```mermaid  
+flowchart TD  
+    byjg/jwt-wrapper --> firebase/php-jwt
+    byjg/jwt-wrapper --> ext-openssl
+```
+
+----  
 [Open source ByJG](http://opensource.byjg.com)
+
