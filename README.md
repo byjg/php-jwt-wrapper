@@ -148,7 +148,7 @@ $token = $jwtWrapper->createJwtData([
 # If exists $_SERVER['HTTP_AUTHENTICATION'] = "Bearer $TOKEN"
 $data = $jwtWrapper->extractData();
 
-# If you want decode directly:
+# If you want to decode directly:
 $data = $jwtWrapper->extractData($token);
 ```
 
