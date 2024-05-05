@@ -2,8 +2,9 @@
 
 namespace ByJG\Util;
 
-class JwtKeySecret implements JwtKeyInterface
+class JwtHashHmacSecret implements JwtKeyInterface
 {
+    use JwtAlgorithmTrait;
 
     protected $key;
 
@@ -12,19 +13,21 @@ class JwtKeySecret implements JwtKeyInterface
      * @param $key
      * @param bool $decode
      */
-    public function __construct($key, $decode = true)
+    public function __construct($key, bool $decode = true, $algorithm = 'HS512')
     {
         $this->key = ($decode ? base64_decode($key) : $key);
+        $this->setAlgorithmType('hash_hmac');
+        $this->setAlgorithm($algorithm);
     }
 
     /**
      * @param $key
      * @param bool $decode
-     * @return JwtKeySecret
+     * @return JwtHashHmacSecret
      */
-    public static function getInstance($key, $decode = true)
+    public static function getInstance($key, bool $decode = true, $algorithm = 'HS512')
     {
-        return new JwtKeySecret($key, $decode);
+        return new JwtHashHmacSecret($key, $decode, $algorithm);
     }
 
     public function getPublicKey()
@@ -35,10 +38,5 @@ class JwtKeySecret implements JwtKeyInterface
     public function getPrivateKey()
     {
         return $this->key;
-    }
-
-    public function getAlghoritm()
-    {
-        return 'HS512';
     }
 }

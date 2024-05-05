@@ -2,8 +2,10 @@
 
 namespace ByJG\Util;
 
-class JwtRsaKey implements JwtKeyInterface
+class JwtOpenSSLKey implements JwtKeyInterface
 {
+    use JwtAlgorithmTrait;
+
     protected $private;
     protected $public;
 
@@ -12,20 +14,22 @@ class JwtRsaKey implements JwtKeyInterface
      * @param $private
      * @param $public
      */
-    public function __construct($private, $public)
+    public function __construct($private, $public, $algorithm = 'RS512')
     {
         $this->private = $private;
         $this->public = $public;
+        $this->setAlgorithmType('openssl');
+        $this->setAlgorithm($algorithm);
     }
 
     /**
      * @param $private
      * @param $public
-     * @return JwtRsaKey
+     * @return JwtOpenSSLKey
      */
-    public static function getInstance($private, $public)
+    public static function getInstance($private, $public, $algorithm = 'RS512')
     {
-        return new JwtRsaKey($private, $public);
+        return new JwtOpenSSLKey($private, $public, $algorithm);
     }
 
     public function getPublicKey()
@@ -36,10 +40,5 @@ class JwtRsaKey implements JwtKeyInterface
     public function getPrivateKey()
     {
         return $this->private;
-    }
-
-    public function getAlghoritm()
-    {
-        return 'RS512';
     }
 }

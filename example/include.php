@@ -11,7 +11,7 @@ class MyWrapper
     public static function getWrapper()
     {
         $server = "example.com";
-        $secret = new \ByJG\Util\JwtKeySecret(base64_encode("secrect_key_for_test"));
+        $secret = new \ByJG\Util\JwtHashHmacSecret(base64_encode("secrect_key_for_test"));
 
         $jwtWrapper = new \ByJG\Util\JwtWrapper($server, $secret);
 

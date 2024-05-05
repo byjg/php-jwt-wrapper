@@ -73,7 +73,7 @@ openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 ```php
 <?php
 $server = "example.com";
-$secret = new \ByJG\Util\JwtKeySecret(base64_encode("secrect_key_for_test"));
+$secret = new \ByJG\Util\JwtHashHmacSecret(base64_encode("secrect_key_for_test"));
 
 $jwtWrapper = new \ByJG\Util\JwtWrapper($server, $secret);
 
@@ -83,7 +83,7 @@ $token = $jwtWrapper->createJwtData([
 ]);
 ```
 
-## Create JWT Token (RSA Encoding)
+## Create JWT Token (OpenSSL Encoding)
 
 ```php
 <?php
@@ -132,7 +132,7 @@ TEXT;
 
 # Note that if you want to use RSA just pass the 3rd argument (public key)
 # See above how to create the RSA Key pair.
-$jwtKey = new \ByJG\Util\JwtRsaKey($secret, $public);
+$jwtKey = new \ByJG\Util\JwtOpenSSLKey($secret, $public);
 $jwtWrapper = new \ByJG\Util\JwtWrapper($server, $jwtKey);
 
 $token = $jwtWrapper->createJwtData([

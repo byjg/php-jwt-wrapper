@@ -69,7 +69,7 @@ class JwtWrapper
         $jwt = JWT::encode(
             $jwtData,      //Data to be encoded in the JWT
             $this->jwtKey->getPrivateKey(), // The signing key
-            $this->jwtKey->getAlghoritm()
+            $this->jwtKey->getAlgorithm()
         );
 
         return $jwt;
@@ -98,7 +98,7 @@ class JwtWrapper
 
         $jwtData = JWT::decode(
             $bearer,
-            new Key($this->jwtKey->getPublicKey(), $this->jwtKey->getAlghoritm())
+            new Key($this->jwtKey->getPublicKey(), $this->jwtKey->getAlgorithm())
         );
 
         if (isset($jwtData->iss) && $jwtData->iss != $this->serverName) {

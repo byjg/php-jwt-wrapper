@@ -6,5 +6,7 @@ interface JwtKeyInterface
 {
     public function getPublicKey();
     public function getPrivateKey();
-    public function getAlghoritm();
+    public function getAlgorithm();
+    public function setAlgorithm($algorithm);
+    public function availableAlgorithm();
 }

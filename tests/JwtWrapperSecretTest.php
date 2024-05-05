@@ -52,7 +52,7 @@ owIDAQAB
 -----END PUBLIC KEY-----
 TEXT;
 
-        $this->jwtKey = new \ByJG\Util\JwtRsaKey($private, $public);
+        $this->jwtKey = new \ByJG\Util\JwtOpenSSLKey($private, $public);
 
         unset($_SERVER["HTTP_AUTHORIZATION"]);
         $this->object = new JwtWrapper($this->server, $this->jwtKey);
@@ -107,7 +107,7 @@ fQIDAQAB
 -----END PUBLIC KEY-----
 TEXT;
 
-        $jwtWrapper = new JwtWrapper($this->server, \ByJG\Util\JwtRsaKey::getInstance($private, $public));
+        $jwtWrapper = new JwtWrapper($this->server, \ByJG\Util\JwtOpenSSLKey::getInstance($private, $public));
 
         $jwtWrapper->extractData($token);
     }
