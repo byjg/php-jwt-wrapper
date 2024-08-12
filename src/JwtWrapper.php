@@ -7,6 +7,12 @@ use Firebase\JWT\Key;
 
 class JwtWrapper
 {
+    const IssuedAt = 'iat';
+    const JsonTokenId = 'jti';
+    const Issuer = 'iss';
+    const NotBefore = 'nbf';
+    const Expire = 'exp';
+    const Subject = 'sub';
 
     protected $serverName;
 
@@ -49,11 +55,11 @@ class JwtWrapper
          * Create the token as an array
          */
         $payload = [
-            'iat'  => $issuedAt,     // Issued at: time when the token was generated
-            'jti'  => $tokenId,      // Json Token Id: an unique identifier for the token
-            'iss'  => $serverName,   // Issuer
-            'nbf'  => $notBefore,    // Not before
-            'exp'  => $expire,       // Expire
+            JwtWrapper::IssuedAt  => $issuedAt,     // Issued at: time when the token was generated
+            JwtWrapper::JsonTokenId  => $tokenId,      // Json Token Id: an unique identifier for the token
+            JwtWrapper::Issuer  => $serverName,   // Issuer
+            JwtWrapper::NotBefore  => $notBefore,    // Not before
+            JwtWrapper::Expire  => $expire,       // Expire
         ];
 
         if (!empty($payloadKey)) {
