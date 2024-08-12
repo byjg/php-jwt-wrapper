@@ -111,7 +111,12 @@ class JwtWrapperHashTest extends TestCase
 
     public function testSuccessfulFlowSubject()
     {
-        $jwt = $this->object->createJwtData(array_merge($this->dataToToken, ["iss" => "new_issuer", "sub" => "userid"]), payloadKey: null);
+        $jwt = $this->object->createJwtData(
+            array_merge($this->dataToToken, ["iss" => "new_issuer", "sub" => "userid"]),
+            60,
+            0,
+            null
+        );
 
         $this->assertEquals([
             'iat'  => $jwt["iat"],  // Not deterministic for the test
