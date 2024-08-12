@@ -37,7 +37,7 @@ class JwtWrapper
      * @param int $secondsNotBefore In Seconds
      * @return array
      */
-    public function createJwtData($data, $secondsExpire = 60, $secondsNotBefore = 0)
+    public function createJwtData($data, $secondsExpire = 60, $secondsNotBefore = 0, $payloadKey = "data")
     {
         $tokenId    = base64_encode(openssl_random_pseudo_bytes(32));
         $issuedAt   = time();
@@ -48,14 +48,21 @@ class JwtWrapper
         /*
          * Create the token as an array
          */
-        return [
-            'iat'  => $issuedAt,         // Issued at: time when the token was generated
-            'jti'  => $tokenId,          // Json Token Id: an unique identifier for the token
-            'iss'  => $serverName,       // Issuer
-            'nbf'  => $notBefore,        // Not before
-            'exp'  => $expire,           // Expire
-            'data' => $data              // Data related to the signer user
+        $payload = [
+            'iat'  => $issuedAt,     // Issued at: time when the token was generated
+            'jti'  => $tokenId,      // Json Token Id: an unique identifier for the token
+            'iss'  => $serverName,   // Issuer
+            'nbf'  => $notBefore,    // Not before
+            'exp'  => $expire,       // Expire
         ];
+
+        if (!empty($payloadKey)) {
+            $payload = array_merge($payload, [$payloadKey => $data]);
+        } else {
+            $payload = array_merge($payload, $data);
+        }
+
+        return $payload;
     }
 
     public function generateToken($jwtData)
@@ -90,7 +97,7 @@ class JwtWrapper
      * @return object
      * @throws JwtWrapperException
      */
-    public function extractData($bearer = null)
+    public function extractData($bearer = null, $enforceIssuer = true)
     {
         if (empty($bearer)) {
             $bearer = $this->getAuthorizationBearer();
@@ -101,7 +108,7 @@ class JwtWrapper
             new Key($this->jwtKey->getPublicKey(), $this->jwtKey->getAlghoritm())
         );
 
-        if (isset($jwtData->iss) && $jwtData->iss != $this->serverName) {
+        if ($enforceIssuer && isset($jwtData->iss) && $jwtData->iss != $this->serverName) {
             throw new JwtWrapperException("Issuer does not match");
         }
 

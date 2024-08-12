@@ -1,11 +1,16 @@
 <?php
 
+namespace Test;
+
 use ByJG\Util\JwtWrapper;
 use ByJG\Util\JwtWrapperException;
+use DomainException;
 use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\SignatureInvalidException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
+use UnexpectedValueException;
 
 class JwtWrapperHashTest extends TestCase
 {
@@ -96,6 +101,42 @@ class JwtWrapperHashTest extends TestCase
         $expectedData->nbf = $jwt["iat"];
         $expectedData->exp = $jwt["iat"] + 60;
         $expectedData->data = (object)$this->dataToToken;
+
+        $this->assertEquals(
+            $expectedData,
+            $data
+        );
+
+    }
+
+    public function testSuccessfulFlowSubject()
+    {
+        $jwt = $this->object->createJwtData(array_merge($this->dataToToken, ["iss" => "new_issuer", "sub" => "userid"]), payloadKey: null);
+
+        $this->assertEquals([
+            'iat'  => $jwt["iat"],  // Not deterministic for the test
+            'jti'  => $jwt["jti"],  // Not deterministic for the test
+            'iss'  => "new_issuer",
+            'sub'  => "userid",
+            'nbf'  => $jwt["iat"],
+            'exp'  => $jwt["iat"] + 60,
+            'name' => $this->dataToToken["name"],
+            "id"   => $this->dataToToken["id"],
+        ], $jwt);
+
+        $token = $this->object->generateToken($jwt);
+
+        $data = $this->object->extractData($token, false);
+
+        $expectedData = new stdClass();
+        $expectedData->iat = $jwt["iat"];  // Not deterministic for the test
+        $expectedData->jti = $jwt["jti"];  // Not deterministic for the test
+        $expectedData->iss = "new_issuer";
+        $expectedData->sub = "userid";
+        $expectedData->nbf = $jwt["iat"];
+        $expectedData->exp = $jwt["iat"] + 60;
+        $expectedData->name = $this->dataToToken["name"];
+        $expectedData->id = $this->dataToToken["id"];
 
         $this->assertEquals(
             $expectedData,
