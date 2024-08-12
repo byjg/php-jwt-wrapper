@@ -1,5 +1,7 @@
 <?php
 
+namespace Test;
+
 use ByJG\Util\JwtWrapper;
 
 require_once __DIR__ . '/JwtWrapperHashTest.php';
