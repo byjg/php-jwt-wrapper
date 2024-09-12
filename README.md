@@ -152,6 +152,14 @@ $data = $jwtWrapper->extractData();
 $data = $jwtWrapper->extractData($token);
 ```
 
+### Issuer validation
+
+By default the issuer is validated against the server name. If you want to disable this validation you can call the method below:
+
+```php
+$data = $jwtWrapper->extractData($token, false); // Setting false disables the issuer validation
+```
+
 ### Adding a Leeway
 
 You can add a leeway to account for when there is a clock skew times between

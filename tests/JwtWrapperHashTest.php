@@ -1,11 +1,16 @@
 <?php
 
+namespace Test;
+
 use ByJG\Util\JwtWrapper;
 use ByJG\Util\JwtWrapperException;
+use DomainException;
 use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\SignatureInvalidException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
+use UnexpectedValueException;
 
 class JwtWrapperHashTest extends TestCase
 {
@@ -43,11 +48,11 @@ class JwtWrapperHashTest extends TestCase
         $jwt = $this->object->createJwtData($this->dataToToken);
 
         $this->assertEquals([
-            'iat'  => $jwt["iat"],  // Not deterministic for the test
-            'jti'  => $jwt["jti"],  // Not deterministic for the test
-            'iss'  => "example.com",
-            'nbf'  => $jwt["iat"],
-            'exp'  => $jwt["iat"] + 60,
+            JwtWrapper::IssuedAt    => $jwt[JwtWrapper::IssuedAt],  // Not deterministic for the test
+            JwtWrapper::JsonTokenId => $jwt[JwtWrapper::JsonTokenId],  // Not deterministic for the test
+            JwtWrapper::Issuer      => "example.com",
+            JwtWrapper::NotBefore   => $jwt[JwtWrapper::IssuedAt],
+            JwtWrapper::Expire      => $jwt[JwtWrapper::IssuedAt] + 60,
             'data' => $this->dataToToken
         ], $jwt);
 
@@ -56,11 +61,11 @@ class JwtWrapperHashTest extends TestCase
         $data = $this->object->extractData($token);
 
         $expectedData = new stdClass();
-        $expectedData->iat = $jwt["iat"];  // Not deterministic for the test
-        $expectedData->jti = $jwt["jti"];  // Not deterministic for the test
+        $expectedData->iat = $jwt[JwtWrapper::IssuedAt];  // Not deterministic for the test
+        $expectedData->jti = $jwt[JwtWrapper::JsonTokenId];  // Not deterministic for the test
         $expectedData->iss = "example.com";
-        $expectedData->nbf = $jwt["iat"];
-        $expectedData->exp = $jwt["iat"] + 60;
+        $expectedData->nbf = $jwt[JwtWrapper::IssuedAt];
+        $expectedData->exp = $jwt[JwtWrapper::IssuedAt] + 60;
         $expectedData->data = (object)$this->dataToToken;
 
         $this->assertEquals(
@@ -75,11 +80,11 @@ class JwtWrapperHashTest extends TestCase
         $jwt = $this->object->createJwtData($this->dataToToken);
 
         $this->assertEquals([
-            'iat'  => $jwt["iat"],  // Not deterministic for the test
-            'jti'  => $jwt["jti"],  // Not deterministic for the test
-            'iss'  => "example.com",
-            'nbf'  => $jwt["iat"],
-            'exp'  => $jwt["iat"] + 60,
+            JwtWrapper::IssuedAt    => $jwt[JwtWrapper::IssuedAt],  // Not deterministic for the test
+            JwtWrapper::JsonTokenId => $jwt[JwtWrapper::JsonTokenId],  // Not deterministic for the test
+            JwtWrapper::Issuer      => "example.com",
+            JwtWrapper::NotBefore   => $jwt[JwtWrapper::IssuedAt],
+            JwtWrapper::Expire      => $jwt[JwtWrapper::IssuedAt] + 60,
             'data' => $this->dataToToken
         ], $jwt);
 
@@ -90,12 +95,53 @@ class JwtWrapperHashTest extends TestCase
         $data = $this->object->extractData();
 
         $expectedData = new stdClass();
-        $expectedData->iat = $jwt["iat"];  // Not deterministic for the test
-        $expectedData->jti = $jwt["jti"];  // Not deterministic for the test
+        $expectedData->iat = $jwt[JwtWrapper::IssuedAt];  // Not deterministic for the test
+        $expectedData->jti = $jwt[JwtWrapper::JsonTokenId];  // Not deterministic for the test
         $expectedData->iss = "example.com";
-        $expectedData->nbf = $jwt["iat"];
-        $expectedData->exp = $jwt["iat"] + 60;
+        $expectedData->nbf = $jwt[JwtWrapper::IssuedAt];
+        $expectedData->exp = $jwt[JwtWrapper::IssuedAt] + 60;
         $expectedData->data = (object)$this->dataToToken;
+
+        $this->assertEquals(
+            $expectedData,
+            $data
+        );
+
+    }
+
+    public function testSuccessfulFlowSubject()
+    {
+        $jwt = $this->object->createJwtData(
+            array_merge($this->dataToToken, [JwtWrapper::Issuer => "new_issuer", JwtWrapper::Subject => "userid"]),
+            60,
+            0,
+            null
+        );
+
+        $this->assertEquals([
+            JwtWrapper::IssuedAt    => $jwt[JwtWrapper::IssuedAt],  // Not deterministic for the test
+            JwtWrapper::JsonTokenId => $jwt[JwtWrapper::JsonTokenId],  // Not deterministic for the test
+            JwtWrapper::Issuer      => "new_issuer",
+            JwtWrapper::Subject     => "userid",
+            JwtWrapper::NotBefore   => $jwt[JwtWrapper::IssuedAt],
+            JwtWrapper::Expire      => $jwt[JwtWrapper::IssuedAt] + 60,
+            'name' => $this->dataToToken["name"],
+            "id"   => $this->dataToToken["id"],
+        ], $jwt);
+
+        $token = $this->object->generateToken($jwt);
+
+        $data = $this->object->extractData($token, false);
+
+        $expectedData = new stdClass();
+        $expectedData->iat = $jwt[JwtWrapper::IssuedAt];  // Not deterministic for the test
+        $expectedData->jti = $jwt[JwtWrapper::JsonTokenId];  // Not deterministic for the test
+        $expectedData->iss = "new_issuer";
+        $expectedData->sub = "userid";
+        $expectedData->nbf = $jwt[JwtWrapper::IssuedAt];
+        $expectedData->exp = $jwt[JwtWrapper::IssuedAt] + 60;
+        $expectedData->name = $this->dataToToken["name"];
+        $expectedData->id = $this->dataToToken["id"];
 
         $this->assertEquals(
             $expectedData,

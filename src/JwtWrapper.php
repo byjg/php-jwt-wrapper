@@ -7,6 +7,12 @@ use Firebase\JWT\Key;
 
 class JwtWrapper
 {
+    const IssuedAt = 'iat';
+    const JsonTokenId = 'jti';
+    const Issuer = 'iss';
+    const NotBefore = 'nbf';
+    const Expire = 'exp';
+    const Subject = 'sub';
 
     protected string $serverName;
 
@@ -32,7 +38,7 @@ class JwtWrapper
      * @param int $secondsNotBefore In Seconds
      * @return array
      */
-    public function createJwtData(array $data, int $secondsExpire = 60, int $secondsNotBefore = 0, ?string $customDataKey = "data"): array
+    public function createJwtData(array $data, int $secondsExpire = 60, int $secondsNotBefore = 0, ?string $payloadKey = "data"): array
     {
         $tokenId    = base64_encode(openssl_random_pseudo_bytes(32));
         $issuedAt   = time();
@@ -40,19 +46,19 @@ class JwtWrapper
         $expire     = $notBefore + $secondsExpire;            // Adding 60 seconds
         $serverName = $this->serverName;                       // Retrieve the server name from config file
 
-        if (!empty($customDataKey)) {
-            $data = [$customDataKey => $data];
+        if (!empty($payloadKey)) {
+            $data = [$payloadKey => $data];
         }
         /*
          * Create the token as an array
          */
         return array_merge(
             [
-                'iat'  => $issuedAt,         // Issued at: time when the token was generated
-                'jti'  => $tokenId,          // Json Token Id: an unique identifier for the token
-                'iss'  => $serverName,       // Issuer
-                'nbf'  => $notBefore,        // Not before
-                'exp'  => $expire,           // Expire
+                JwtWrapper::IssuedAt  => $issuedAt,     // Issued at: time when the token was generated
+                JwtWrapper::JsonTokenId  => $tokenId,      // Json Token Id: an unique identifier for the token
+                JwtWrapper::Issuer  => $serverName,   // Issuer
+                JwtWrapper::NotBefore  => $notBefore,    // Not before
+                JwtWrapper::Expire  => $expire,       // Expire
             ],
             $data                            // Data related to the signer user
         );
@@ -84,11 +90,12 @@ class JwtWrapper
      * keep it secure! You'll need the exact key to verify the
      * token later.
      *
-     * @param null $bearer
+     * @param string|null $bearer
+     * @param bool $enforceIssuer
      * @return object
      * @throws JwtWrapperException
      */
-    public function extractData(?string $bearer = null): \stdClass
+    public function extractData(?string $bearer = null, bool $enforceIssuer = true): \stdClass
     {
         if (empty($bearer)) {
             $bearer = $this->getAuthorizationBearer();
@@ -99,7 +106,7 @@ class JwtWrapper
             new Key($this->jwtKey->getPublicKey(), $this->jwtKey->getAlgorithm())
         );
 
-        if (isset($jwtData->iss) && $jwtData->iss != $this->serverName) {
+        if ($enforceIssuer && isset($jwtData->iss) && $jwtData->iss != $this->serverName) {
             throw new JwtWrapperException("Issuer does not match");
         }
 

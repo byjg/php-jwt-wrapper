@@ -6,6 +6,11 @@
       "ByJG\\Util\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Test\\": "tests/"
+    }
+  },
   "license": "MIT",
   "require": {
     "firebase/php-jwt": "^6",
