@@ -2,37 +2,37 @@
 
 namespace ByJG\Util;
 
-use Firebase\JWT\JWK;
 use Firebase\JWT\JWT;
+use InvalidArgumentException;
 
 trait JwtAlgorithmTrait
 {
-    protected $algorithm = null;
-    protected $algorithmType = null;
-    protected $availableAlgorithms = [];
+    protected string $algorithm;
+    protected string $algorithmType;
+    protected array$availableAlgorithms = [];
 
-    protected function setAlgorithmType($type)
+    protected function setAlgorithmType(string $type): void
     {
         if (!in_array($type, ['hash_hmac', 'openssl'])) {
-            throw new \InvalidArgumentException("Invalid algorithm type");
+            throw new InvalidArgumentException("Invalid algorithm type");
         }
         $this->algorithmType = $type;
     }
 
-    public function getAlgorithm()
+    public function getAlgorithm(): string
     {
         return $this->algorithm;
     }
 
-    public function setAlgorithm($algorithm)
+    public function setAlgorithm(string $algorithm): void
     {
         if (!in_array($algorithm, $this->availableAlgorithm())) {
-            throw new \InvalidArgumentException("Algorithm not supported");
+            throw new InvalidArgumentException("Algorithm not supported");
         }
         $this->algorithm = $algorithm;
     }
 
-    public function availableAlgorithm()
+    public function availableAlgorithm(): array
     {
         if (empty($this->availableAlgorithms)) {
             $algs = JWT::$supported_algs;

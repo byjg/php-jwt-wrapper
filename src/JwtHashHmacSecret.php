@@ -6,14 +6,15 @@ class JwtHashHmacSecret implements JwtKeyInterface
 {
     use JwtAlgorithmTrait;
 
-    protected $key;
+    protected string $key;
 
     /**
      * JwtKeySecret constructor.
-     * @param $key
+     * @param string $key
      * @param bool $decode
+     * @param string $algorithm
      */
-    public function __construct($key, bool $decode = true, $algorithm = 'HS512')
+    public function __construct(string $key, bool $decode = true, string $algorithm = 'HS512')
     {
         $this->key = ($decode ? base64_decode($key) : $key);
         $this->setAlgorithmType('hash_hmac');
@@ -21,21 +22,22 @@ class JwtHashHmacSecret implements JwtKeyInterface
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @param bool $decode
+     * @param string $algorithm
      * @return JwtHashHmacSecret
      */
-    public static function getInstance($key, bool $decode = true, $algorithm = 'HS512')
+    public static function getInstance(string $key, bool $decode = true, string $algorithm = 'HS512'): JwtHashHmacSecret
     {
         return new JwtHashHmacSecret($key, $decode, $algorithm);
     }
 
-    public function getPublicKey()
+    public function getPublicKey(): string
     {
         return $this->key;
     }
 
-    public function getPrivateKey()
+    public function getPrivateKey(): string
     {
         return $this->key;
     }

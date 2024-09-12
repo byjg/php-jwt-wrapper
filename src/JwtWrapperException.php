@@ -2,7 +2,9 @@
 
 namespace ByJG\Util;
 
-class JwtWrapperException extends \Exception
+use Exception;
+
+class JwtWrapperException extends Exception
 {
 
 }

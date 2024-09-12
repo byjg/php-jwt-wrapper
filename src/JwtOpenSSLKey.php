@@ -6,8 +6,8 @@ class JwtOpenSSLKey implements JwtKeyInterface
 {
     use JwtAlgorithmTrait;
 
-    protected $private;
-    protected $public;
+    protected string $private;
+    protected string $public;
 
     /**
      * JwtRsaKey constructor.
@@ -23,21 +23,22 @@ class JwtOpenSSLKey implements JwtKeyInterface
     }
 
     /**
-     * @param $private
-     * @param $public
+     * @param string $private
+     * @param string $public
+     * @param string $algorithm
      * @return JwtOpenSSLKey
      */
-    public static function getInstance($private, $public, $algorithm = 'RS512')
+    public static function getInstance(string $private, string $public, string $algorithm = 'RS512'): JwtOpenSSLKey
     {
         return new JwtOpenSSLKey($private, $public, $algorithm);
     }
 
-    public function getPublicKey()
+    public function getPublicKey(): string
     {
         return $this->public;
     }
 
-    public function getPrivateKey()
+    public function getPrivateKey(): string
     {
         return $this->private;
     }

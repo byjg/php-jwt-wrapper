@@ -4,9 +4,9 @@ namespace ByJG\Util;
 
 interface JwtKeyInterface
 {
-    public function getPublicKey();
-    public function getPrivateKey();
-    public function getAlgorithm();
-    public function setAlgorithm($algorithm);
-    public function availableAlgorithm();
+    public function getPublicKey(): string;
+    public function getPrivateKey(): string;
+    public function getAlgorithm(): string;
+    public function setAlgorithm(string $algorithm): void;
+    public function availableAlgorithm(): array;
 }

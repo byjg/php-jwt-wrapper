@@ -4,6 +4,7 @@ namespace ByJG\Util;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use stdClass;
 
 class JwtWrapper
 {
@@ -92,10 +93,10 @@ class JwtWrapper
      *
      * @param string|null $bearer
      * @param bool $enforceIssuer
-     * @return object
+     * @return stdClass
      * @throws JwtWrapperException
      */
-    public function extractData(?string $bearer = null, bool $enforceIssuer = true): \stdClass
+    public function extractData(?string $bearer = null, bool $enforceIssuer = true): stdClass
     {
         if (empty($bearer)) {
             $bearer = $this->getAuthorizationBearer();
@@ -119,7 +120,7 @@ class JwtWrapper
      */
     public function getAuthorizationBearer(): string
     {
-        $authorization = isset($_SERVER['HTTP_AUTHORIZATION']) ? $_SERVER['HTTP_AUTHORIZATION'] : "";
+        $authorization = $_SERVER['HTTP_AUTHORIZATION'] ?? "";
         list($bearer) = sscanf($authorization, 'Bearer %s');
 
         if (empty($bearer)) {
