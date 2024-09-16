@@ -2,14 +2,14 @@
 
 namespace Test;
 
-use ByJG\Util\JwtWrapper;
+use ByJG\JwtWrapper\JwtWrapper;
 
 require_once __DIR__ . '/JwtWrapperHashTest.php';
 
 class JwtWrapperSecretTest extends JwtWrapperHashTest
 {
     /**
-     * @throws \ByJG\Util\JwtWrapperException
+     * @throws \ByJG\JwtWrapper\JwtWrapperException
      */
     protected function setUp(): void
     {
@@ -54,7 +54,7 @@ owIDAQAB
 -----END PUBLIC KEY-----
 TEXT;
 
-        $this->jwtKey = new \ByJG\Util\JwtRsaKey($private, $public);
+        $this->jwtKey = new \ByJG\JwtWrapper\JwtOpenSSLKey($private, $public);
 
         unset($_SERVER["HTTP_AUTHORIZATION"]);
         $this->object = new JwtWrapper($this->server, $this->jwtKey);
@@ -109,7 +109,7 @@ fQIDAQAB
 -----END PUBLIC KEY-----
 TEXT;
 
-        $jwtWrapper = new JwtWrapper($this->server, \ByJG\Util\JwtRsaKey::getInstance($private, $public));
+        $jwtWrapper = new JwtWrapper($this->server, \ByJG\JwtWrapper\JwtOpenSSLKey::getInstance($private, $public));
 
         $jwtWrapper->extractData($token);
     }

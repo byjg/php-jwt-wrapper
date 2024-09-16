@@ -1,8 +1,10 @@
 <?php
 
-namespace ByJG\Util;
+namespace ByJG\JwtWrapper;
 
-class JwtWrapperException extends \Exception
+use Exception;
+
+class JwtWrapperException extends Exception
 {
 
 }

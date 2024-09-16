@@ -1,9 +1,10 @@
 <?php
 
-namespace ByJG\Util;
+namespace ByJG\JwtWrapper;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use stdClass;
 
 class JwtWrapper
 {
@@ -14,36 +15,31 @@ class JwtWrapper
     const Expire = 'exp';
     const Subject = 'sub';
 
-    protected $serverName;
+    protected string $serverName;
 
     /**
      * @var JwtKeyInterface
      */
-    protected $jwtKey;
+    protected JwtKeyInterface $jwtKey;
 
     /**
      * JwtWrapper constructor.
      * @param string $serverName
      * @param JwtKeyInterface $jwtKey
-     * @throws JwtWrapperException
      */
-    public function __construct($serverName, $jwtKey)
+    public function __construct(string $serverName, JwtKeyInterface $jwtKey)
     {
         $this->serverName = $serverName;
         $this->jwtKey = $jwtKey;
-
-        if (!($jwtKey instanceof JwtKeyInterface)) {
-            throw new JwtWrapperException('Constructor needs to receive a JwtKeyInterface');
-        }
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @param int $secondsExpire In Seconds
      * @param int $secondsNotBefore In Seconds
      * @return array
      */
-    public function createJwtData($data, $secondsExpire = 60, $secondsNotBefore = 0, $payloadKey = "data")
+    public function createJwtData(array $data, int $secondsExpire = 60, int $secondsNotBefore = 0, ?string $payloadKey = "data"): array
     {
         $tokenId    = base64_encode(openssl_random_pseudo_bytes(32));
         $issuedAt   = time();
@@ -51,27 +47,25 @@ class JwtWrapper
         $expire     = $notBefore + $secondsExpire;            // Adding 60 seconds
         $serverName = $this->serverName;                       // Retrieve the server name from config file
 
+        if (!empty($payloadKey)) {
+            $data = [$payloadKey => $data];
+        }
         /*
          * Create the token as an array
          */
-        $payload = [
-            JwtWrapper::IssuedAt  => $issuedAt,     // Issued at: time when the token was generated
-            JwtWrapper::JsonTokenId  => $tokenId,      // Json Token Id: an unique identifier for the token
-            JwtWrapper::Issuer  => $serverName,   // Issuer
-            JwtWrapper::NotBefore  => $notBefore,    // Not before
-            JwtWrapper::Expire  => $expire,       // Expire
-        ];
-
-        if (!empty($payloadKey)) {
-            $payload = array_merge($payload, [$payloadKey => $data]);
-        } else {
-            $payload = array_merge($payload, $data);
-        }
-
-        return $payload;
+        return array_merge(
+            [
+                JwtWrapper::IssuedAt  => $issuedAt,     // Issued at: time when the token was generated
+                JwtWrapper::JsonTokenId  => $tokenId,      // Json Token Id: an unique identifier for the token
+                JwtWrapper::Issuer  => $serverName,   // Issuer
+                JwtWrapper::NotBefore  => $notBefore,    // Not before
+                JwtWrapper::Expire  => $expire,       // Expire
+            ],
+            $data                            // Data related to the signer user
+        );
     }
 
-    public function generateToken($jwtData)
+    public function generateToken(array $jwtData): string
     {
         /*
          * Encode the array to a JWT string.
@@ -79,13 +73,11 @@ class JwtWrapper
          *
          * The output string can be validated at http://jwt.io/
          */
-        $jwt = JWT::encode(
+        return JWT::encode(
             $jwtData,      //Data to be encoded in the JWT
             $this->jwtKey->getPrivateKey(), // The signing key
-            $this->jwtKey->getAlghoritm()
+            $this->jwtKey->getAlgorithm()
         );
-
-        return $jwt;
     }
 
     /**
@@ -99,11 +91,12 @@ class JwtWrapper
      * keep it secure! You'll need the exact key to verify the
      * token later.
      *
-     * @param null $bearer
-     * @return object
+     * @param string|null $bearer
+     * @param bool $enforceIssuer
+     * @return stdClass
      * @throws JwtWrapperException
      */
-    public function extractData($bearer = null, $enforceIssuer = true)
+    public function extractData(?string $bearer = null, bool $enforceIssuer = true): stdClass
     {
         if (empty($bearer)) {
             $bearer = $this->getAuthorizationBearer();
@@ -111,7 +104,7 @@ class JwtWrapper
 
         $jwtData = JWT::decode(
             $bearer,
-            new Key($this->jwtKey->getPublicKey(), $this->jwtKey->getAlghoritm())
+            new Key($this->jwtKey->getPublicKey(), $this->jwtKey->getAlgorithm())
         );
 
         if ($enforceIssuer && isset($jwtData->iss) && $jwtData->iss != $this->serverName) {
@@ -125,9 +118,9 @@ class JwtWrapper
      * @return mixed
      * @throws JwtWrapperException
      */
-    public function getAuthorizationBearer()
+    public function getAuthorizationBearer(): string
     {
-        $authorization = isset($_SERVER['HTTP_AUTHORIZATION']) ? $_SERVER['HTTP_AUTHORIZATION'] : "";
+        $authorization = $_SERVER['HTTP_AUTHORIZATION'] ?? "";
         list($bearer) = sscanf($authorization, 'Bearer %s');
 
         if (empty($bearer)) {
@@ -137,7 +130,7 @@ class JwtWrapper
         return $bearer;
     }
 
-    public static function generateSecret($bytes)
+    public static function generateSecret(int $bytes): string
     {
         return base64_encode(openssl_random_pseudo_bytes($bytes));
     }
@@ -146,12 +139,12 @@ class JwtWrapper
      * @param int $seconds A value no more than few minutes (in seconds) e.g. 60
      * @see: https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.4
      */
-    public function setLeeway($seconds)
+    public function setLeeway(int $seconds): void
     {
         JWT::$leeway = $seconds;
     }
     
-    public function getLeeway()
+    public function getLeeway(): int
     {
         return JWT::$leeway;
     }

@@ -73,9 +73,9 @@ openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 ```php
 <?php
 $server = "example.com";
-$secret = new \ByJG\Util\JwtKeySecret(base64_encode("secrect_key_for_test"));
+$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(base64_encode("secrect_key_for_test"));
 
-$jwtWrapper = new \ByJG\Util\JwtWrapper($server, $secret);
+$jwtWrapper = new \ByJG\JwtWrapper\JwtWrapper($server, $secret);
 
 $token = $jwtWrapper->createJwtData([
     "key" => "value",
@@ -83,7 +83,7 @@ $token = $jwtWrapper->createJwtData([
 ]);
 ```
 
-## Create JWT Token (RSA Encoding)
+## Create JWT Token (OpenSSL Encoding)
 
 ```php
 <?php
@@ -132,8 +132,8 @@ TEXT;
 
 # Note that if you want to use RSA just pass the 3rd argument (public key)
 # See above how to create the RSA Key pair.
-$jwtKey = new \ByJG\Util\JwtRsaKey($secret, $public);
-$jwtWrapper = new \ByJG\Util\JwtWrapper($server, $jwtKey);
+$jwtKey = new \ByJG\JwtWrapper\JwtOpenSSLKey($secret, $public);
+$jwtWrapper = new \ByJG\JwtWrapper\JwtWrapper($server, $jwtKey);
 
 $token = $jwtWrapper->createJwtData([
     "key" => "value",
@@ -148,7 +148,7 @@ $token = $jwtWrapper->createJwtData([
 # If exists $_SERVER['HTTP_AUTHENTICATION'] = "Bearer $TOKEN"
 $data = $jwtWrapper->extractData();
 
-# If you want decode directly:
+# If you want to decode directly:
 $data = $jwtWrapper->extractData($token);
 ```
 
