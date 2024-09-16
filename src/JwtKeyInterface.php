@@ -1,6 +1,6 @@
 <?php
 
-namespace ByJG\Util;
+namespace ByJG\JwtWrapper;
 
 interface JwtKeyInterface
 {

@@ -3,7 +3,7 @@
   "description": "A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component",
   "autoload": {
     "psr-4": {
-      "ByJG\\Util\\": "src/"
+      "ByJG\\JwtWrapper\\": "src/"
     }
   },
   "autoload-dev": {

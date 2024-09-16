@@ -1,6 +1,6 @@
 <?php
 
-namespace ByJG\Util;
+namespace ByJG\JwtWrapper;
 
 use Firebase\JWT\JWT;
 use InvalidArgumentException;

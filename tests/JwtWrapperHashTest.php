@@ -2,8 +2,8 @@
 
 namespace Test;
 
-use ByJG\Util\JwtWrapper;
-use ByJG\Util\JwtWrapperException;
+use ByJG\JwtWrapper\JwtWrapper;
+use ByJG\JwtWrapper\JwtWrapperException;
 use DomainException;
 use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
@@ -24,13 +24,13 @@ class JwtWrapperHashTest extends TestCase
     protected $server = "example.com";
 
     /**
-     * @var \ByJG\Util\JwtKeyInterface
+     * @var \ByJG\JwtWrapper\JwtKeyInterface
      */
     protected $jwtKey;
 
     protected function setUp(): void
     {
-        $this->jwtKey = \ByJG\Util\JwtHashHmacSecret::getInstance("secrect_key_for_test", false);
+        $this->jwtKey = \ByJG\JwtWrapper\JwtHashHmacSecret::getInstance("secrect_key_for_test", false);
 
         unset($_SERVER["HTTP_AUTHORIZATION"]);
         $this->object = new JwtWrapper($this->server, $this->jwtKey);
@@ -169,7 +169,7 @@ class JwtWrapperHashTest extends TestCase
         $jwt = $this->object->createJwtData($this->dataToToken);
         $token = $this->object->generateToken($jwt);
 
-        $jwtWrapper = new JwtWrapper($this->server, new \ByJG\Util\JwtHashHmacSecret("some_creepy_secret", true));
+        $jwtWrapper = new JwtWrapper($this->server, new \ByJG\JwtWrapper\JwtHashHmacSecret("some_creepy_secret", true));
 
         $jwtWrapper->extractData($token);
     }
