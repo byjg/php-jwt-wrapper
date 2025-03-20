@@ -1,10 +1,10 @@
-# Jwt-Wrapper for Firebase Jwt
-
 [![Build Status](https://github.com/byjg/php-jwt-wrapper/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/byjg/php-jwt-wrapper/actions/workflows/phpunit.yml)
 [![Opensource ByJG](https://img.shields.io/badge/opensource-byjg-success.svg)](http://opensource.byjg.com)
 [![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/php-jwt-wrapper/)
 [![GitHub license](https://img.shields.io/github/license/byjg/php-jwt-wrapper.svg)](https://opensource.byjg.com/opensource/licensing.html)
 [![GitHub release](https://img.shields.io/github/release/byjg/php-jwt-wrapper.svg)](https://github.com/byjg/php-jwt-wrapper/releases/)
+
+# Jwt-Wrapper for Firebase Jwt
 
 A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component
 
