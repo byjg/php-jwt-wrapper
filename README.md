@@ -4,34 +4,66 @@
 [![GitHub license](https://img.shields.io/github/license/byjg/php-jwt-wrapper.svg)](https://opensource.byjg.com/opensource/licensing.html)
 [![GitHub release](https://img.shields.io/github/release/byjg/php-jwt-wrapper.svg)](https://github.com/byjg/php-jwt-wrapper/releases/)
 
-# Jwt-Wrapper for Firebase Jwt
+# PHP JWT Wrapper
 
-A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component
+A simple and flexible wrapper around the Firebase JWT library that makes JWT token handling easy and intuitive in PHP applications.
 
-## How it works
+## Features
 
-This library is intented to be located at server side.
+- **Simple API**: Create and validate JWT tokens with minimal code
+- **Flexible Signing**: Support for both HMAC (shared secret) and RSA/ECDSA (public/private key) methods
+- **Automatic Claims**: Built-in handling of standard JWT claims (iat, exp, nbf)
+- **HTTP Integration**: Helper methods for extracting tokens from HTTP headers
+- **Key Management**: Intuitive interfaces for different key types
 
-The flow is
+## Installation
 
-### Without Token:
-
-```mermaid
-sequenceDiagram
-    participant LOCAL
-    participant CLIENT
-    participant SERVER
-    CLIENT->>SERVER: Request Token
-    SERVER->>CLIENT: Generate Token
-    CLIENT->>LOCAL: Store Token
+```bash
+composer require "byjg/jwt-wrapper"
 ```
 
-Generate Token:
- * JwtWrapper::createJwtData
- * JwtWrapper::generateToken
+## Quick Example
+
+```php
+// Create a JWT token using HMAC
+$server = "example.com";
+$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(base64_encode("your_secret_key"));
+$jwtWrapper = new \ByJG\JwtWrapper\JwtWrapper($server, $secret);
+
+// Add custom data and set expiration
+$token = $jwtWrapper->generateToken(
+    $jwtWrapper->createJwtData(["userId" => 123], 3600)
+);
+
+// Validate and extract data
+try {
+    $jwtData = $jwtWrapper->extractData($token);
+    $userId = $jwtData->data->userId;
+} catch (\ByJG\JwtWrapper\JwtWrapperException $e) {
+    // Handle invalid token
+}
+```
+
+## Documentation
+
+Detailed documentation:
+
+| Document                                          | Description                             |
+|---------------------------------------------------|-----------------------------------------|
+| [Overview](docs/01-overview.md)                   | Int roduction and core concepts         |
+| [Key Types](docs/02-key-types.md)                 | HMAC and OpenSSL key configuration      |
+| [Creating Tokens](docs/03-creating-tokens.md)     | Token generation and customization      |
+| [Validating Tokens](docs/04-validating-tokens.md) | Token validation and data extraction    |
+| [API Reference](docs/05-api-reference.md)         | Complete class and method documentation |
 
 
-### With token
+## Examples
+
+The library includes complete examples in the `example` directory showing:
+
+- Token creation with login.php
+- Token validation with api.php
+- Client-side usage with client.html
 
 ```mermaid
 sequenceDiagram
@@ -46,157 +78,10 @@ sequenceDiagram
     CLIENT->>LOCAL: Store Token
 ```
 
-Validate Token:
- * JwtWrapper::extractData
-
-## Create your Jwt Secret Key
-
-You can use two type of secret keys. A Hash (HS512) that is faster, or a RSA (RS512) that is more secure.
-
-### Hash Key
-
-```bash
-openssl rand -base64 64     # set here the size of your key
-```
-
-### RSA
-
-```bash
-ssh-keygen -t rsa -C "Jwt RSA Key" -b 2048 -f private.pem
-openssl rsa -in private.pem -outform PEM -pubout -out public.pem
-```
-
-**Note**: Save without password
-
-## Create JWT Token (Hash Encoding)
-
-```php
-<?php
-$server = "example.com";
-$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(base64_encode("secrect_key_for_test"));
-
-$jwtWrapper = new \ByJG\JwtWrapper\JwtWrapper($server, $secret);
-
-$token = $jwtWrapper->createJwtData([
-    "key" => "value",
-    "key2" => "value2"
-]);
-```
-
-## Create JWT Token (OpenSSL Encoding)
-
-```php
-<?php
-$server = "example.com";
-$secret = <<<TEXT
------BEGIN RSA PRIVATE KEY-----
-MIIEpQIBAAKCAQEA5PMdWRa+rUJmg6QMNAPIXa+BJVN7W0vxPN3WTK/OIv5gxgmj
-2inHGGc6f90TW/to948LnqGtcD3CD9KsI55MubafwBYjcds1o9opZ0vYwwdIV80c
-OVZX1IUZFTbnyyKcXeFmKt49A52haCiy4iNxcRK38tOCApjZySx/NzMDeaXuWe+1
-nd3pbgYa/I8MkECa5EyabhZJPJo9fGoSZIklNnyq4TfAUSwl+KN/zjj3CXad1oDT
-7XDDgMJDUu/Vxs7h3CQI9zILSYcL9zwttbLnJW1WcLlAAIaAfABtSZboznsStMnY
-to01wVknXKyERFs7FLHYqKQANIvRhFTptsehowIDAQABAoIBAEkJkaQ5EE0fcKqw
-K8BwMHxKn81zi1e9q1C6iEHgl8csFV03+BCB4WTUkaH2udVPJ9ZJyPArLbQvz3fS
-wl1+g4V/UAksRtRslPkXgLvWQ2k8KoTwBv/3nn9Kkozk/h8chHuii0BDs30yzSn4
-SdDAc9EZopsRhFklv9xgmJjYalRk02OLck73G+d6MpDqX56o2UA/lf6i9MV19KWP
-HYip7CAN+i6k8gA0KPHwr76ehgQ6YHtSntkWS8RfVI8fLUB1UlT3HmLgUBNXMWkQ
-ZZbvXtNOt6NtW/WIAHEYeE9jmFgrpW5jKJSLn5iGVPFZwJIZXRPyELEs9NHWkS6e
-GmdzxnECgYEA8+m05B/tmeZOuMrPVJV9g+aBDcuxmW+sdLRch+ccSmx4ZNQOLVoU
-klYgTZq/a1O4ENq0h2WgccNlRHdcH4sXMBvLalA/tFhZMUuA/KXWyZ1F0hBnjHVF
-cj1alHCqh+9qJDGdn4mxSmrp8p0rfeWgBwlFtJEJmjjDWDCtVY+JZcsCgYEA8EuV
-WF/ilgDjgC4jMCYNuO0oFGBbtNP17PuU3kh8W+joqK/nufZ3NLy1WrDIpqa9YPex
-328Nnjljf5GJWSdMchAp82waLzl7FaaBTY0iyFAK4J0jfC/fVLx82+wpM3utDnh8
-9x5iIboO5U7uEJ7k8X2p64GoprlKJSRmGAJ7eIkCgYEAw5IsXI3NMY0cqcbUHvoO
-PehgqfMdX+3O1XSYjM+eO35lulLdWzfTLtKn7BGcUi46dCkofzfZQd5uIEukLhaU
-bRqcK45UxgHg4kmsDufaJKZaCWjl3hVZrZPMQSFlWsF41bSCshzxbr3y/3lOGhA4
-E+w3W+S/Uk0ZNGkzUltYy6kCgYEA0gRNeBr9z7rhG4O3j3qC3dCxCfYZ0Na8hy5v
-M0PJJQ9QYTa04iyOjVItcyE1jaoHtLtoA+9syJBB7RoHIBufzcVg1Pbzf7jOYeLP
-+jbTYp3Kk/vjKsQwfj/rJM+oRu3eF9qo5dbxT6btI++zVGV7lbEOFN6Sx30EV6gT
-bwKkZXkCgYEAnEtN43xL8bRFybMc1ZJErjc0VocnoQxCHm7LuAtLOEUw6CwwFj9Q
-GOl+GViVuDHUNQvURLn+6gg4tAemYlob912xIPaU44+lZzTMHBOJBGMJKi8WogKi
-V5+cz9l31uuAgNfjL63jZPaAzKs8Zx6R3O5RuezympwijCIGWILbO2Q=
------END RSA PRIVATE KEY-----
-TEXT;
-          
-$public = <<<TEXT
------BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5PMdWRa+rUJmg6QMNAPI
-Xa+BJVN7W0vxPN3WTK/OIv5gxgmj2inHGGc6f90TW/to948LnqGtcD3CD9KsI55M
-ubafwBYjcds1o9opZ0vYwwdIV80cOVZX1IUZFTbnyyKcXeFmKt49A52haCiy4iNx
-cRK38tOCApjZySx/NzMDeaXuWe+1nd3pbgYa/I8MkECa5EyabhZJPJo9fGoSZIkl
-Nnyq4TfAUSwl+KN/zjj3CXad1oDT7XDDgMJDUu/Vxs7h3CQI9zILSYcL9zwttbLn
-JW1WcLlAAIaAfABtSZboznsStMnYto01wVknXKyERFs7FLHYqKQANIvRhFTptseh
-owIDAQAB
------END PUBLIC KEY-----
-TEXT;
-
-# Note that if you want to use RSA just pass the 3rd argument (public key)
-# See above how to create the RSA Key pair.
-$jwtKey = new \ByJG\JwtWrapper\JwtOpenSSLKey($secret, $public);
-$jwtWrapper = new \ByJG\JwtWrapper\JwtWrapper($server, $jwtKey);
-
-$token = $jwtWrapper->createJwtData([
-    "key" => "value",
-    "key2" => "value2"
-]);
-```
-
-## Extracting
-
-```php
-<?php
-# If exists $_SERVER['HTTP_AUTHENTICATION'] = "Bearer $TOKEN"
-$data = $jwtWrapper->extractData();
-
-# If you want to decode directly:
-$data = $jwtWrapper->extractData($token);
-```
-
-### Issuer validation
-
-By default the issuer is validated against the server name. If you want to disable this validation you can call the method below:
-
-```php
-$data = $jwtWrapper->extractData($token, false); // Setting false disables the issuer validation
-```
-
-### Adding a Leeway
-
-You can add a leeway to account for when there is a clock skew times between
-the signing and verifying servers. It is recommended that this leeway should
-not be bigger than a few minutes.
-
-```php
-$jwtWrapper->setLeeway(60)
-```
-
-Important: Since the Firebase JWT class set the leeway value as a "static" property
-once you call the method above it will set up the same value to all JwtWrapper instances
-
-## Install
-
-```bash
-composer require "byjg/jwt-wrapper"
-```
-
 ## Running the tests
 
 ```bash
 vendor/bin/phpunit
-```
-
-## Running a sample test
-
-Start a local server:
-
-```bash
-php -S localhost:8080
-```
-
-Access from you web browser the client.html
-
-```bash
-http://localhost:8080/client.html
 ```
 
 ## Dependencies
@@ -207,6 +92,6 @@ flowchart TD
     byjg/jwt-wrapper --> ext-openssl
 ```
 
-----  
+----
 [Open source ByJG](http://opensource.byjg.com)
 
