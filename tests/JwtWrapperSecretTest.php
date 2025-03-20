@@ -3,14 +3,13 @@
 namespace Test;
 
 use ByJG\JwtWrapper\JwtWrapper;
+use Override;
 
 require_once __DIR__ . '/JwtWrapperHashTest.php';
 
 class JwtWrapperSecretTest extends JwtWrapperHashTest
 {
-    /**
-     * @throws \ByJG\JwtWrapper\JwtWrapperException
-     */
+    #[Override]
     protected function setUp(): void
     {
         $private = <<<TEXT
@@ -61,6 +60,7 @@ TEXT;
     }
 
 
+    #[Override]
     public function testTokenWrongSecret()
     {
         $this->expectException(\Firebase\JWT\SignatureInvalidException::class);

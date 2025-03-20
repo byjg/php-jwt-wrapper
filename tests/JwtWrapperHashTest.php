@@ -2,12 +2,15 @@
 
 namespace Test;
 
+use ByJG\JwtWrapper\JwtHashHmacSecret;
+use ByJG\JwtWrapper\JwtKeyInterface;
 use ByJG\JwtWrapper\JwtWrapper;
 use ByJG\JwtWrapper\JwtWrapperException;
 use DomainException;
 use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\SignatureInvalidException;
+use Override;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use UnexpectedValueException;
@@ -16,26 +19,28 @@ class JwtWrapperHashTest extends TestCase
 {
 
     /**
-     * @var JwtWrapper
+     * @var JwtWrapper|null
      */
-    protected $object;
+    protected ?JwtWrapper $object;
 
-    protected $dataToToken = ["name" => "John", "id"=>"1"];
-    protected $server = "example.com";
+    protected array $dataToToken = ["name" => "John", "id"=>"1"];
+    protected string $server = "example.com";
 
     /**
-     * @var \ByJG\JwtWrapper\JwtKeyInterface
+     * @var JwtKeyInterface|null
      */
-    protected $jwtKey;
+    protected ?JwtKeyInterface $jwtKey;
 
+    #[Override]
     protected function setUp(): void
     {
-        $this->jwtKey = \ByJG\JwtWrapper\JwtHashHmacSecret::getInstance("secrect_key_for_test", false);
+        $this->jwtKey = JwtHashHmacSecret::getInstance("secrect_key_for_test", false);
 
         unset($_SERVER["HTTP_AUTHORIZATION"]);
         $this->object = new JwtWrapper($this->server, $this->jwtKey);
     }
 
+    #[Override]
     protected function tearDown(): void
     {
         $this->object = null;
@@ -169,7 +174,7 @@ class JwtWrapperHashTest extends TestCase
         $jwt = $this->object->createJwtData($this->dataToToken);
         $token = $this->object->generateToken($jwt);
 
-        $jwtWrapper = new JwtWrapper($this->server, new \ByJG\JwtWrapper\JwtHashHmacSecret("some_creepy_secret", true));
+        $jwtWrapper = new JwtWrapper($this->server, new JwtHashHmacSecret("some_creepy_secret", true));
 
         $jwtWrapper->extractData($token);
     }

@@ -74,7 +74,7 @@ class JwtWrapper
          * The output string can be validated at http://jwt.io/
          */
         return JWT::encode(
-            $jwtData,      //Data to be encoded in the JWT
+            $jwtData,      // Data to be encoded in the JWT
             $this->jwtKey->getPrivateKey(), // The signing key
             $this->jwtKey->getAlgorithm()
         );

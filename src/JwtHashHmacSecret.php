@@ -2,6 +2,8 @@
 
 namespace ByJG\JwtWrapper;
 
+use Override;
+
 class JwtHashHmacSecret implements JwtKeyInterface
 {
     use JwtAlgorithmTrait;
@@ -32,11 +34,13 @@ class JwtHashHmacSecret implements JwtKeyInterface
         return new JwtHashHmacSecret($key, $decode, $algorithm);
     }
 
+    #[Override]
     public function getPublicKey(): string
     {
         return $this->key;
     }
 
+    #[Override]
     public function getPrivateKey(): string
     {
         return $this->key;
