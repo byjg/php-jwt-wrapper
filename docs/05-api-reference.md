@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # API Reference
 
 This document provides a detailed reference for all classes and methods in the PHP JWT Wrapper library.
@@ -225,4 +229,9 @@ try {
     // Handle the exception
     echo $e->getMessage();
 }
-``` 
+```
+
+## See Also
+
+- [Creating Tokens](03-creating-tokens.md) - Practical examples of using these API methods
+- [Validating Tokens](04-validating-tokens.md) - Examples of token validation using the API 

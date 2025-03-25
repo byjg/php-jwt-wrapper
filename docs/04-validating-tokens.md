@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 # Validating and Extracting JWT Tokens
 
 Once you've created and distributed JWT tokens, you'll need to validate them when clients make requests to your server. This document explains how to validate and extract data from JWT tokens.
@@ -125,4 +129,9 @@ try {
     echo json_encode(['error' => 'Server error', 'message' => $e->getMessage()]);
     exit;
 }
-``` 
+```
+
+## See Also
+
+- [Creating Tokens](03-creating-tokens.md) - Learn how to create the tokens you're validating
+- [API Reference](05-api-reference.md) - Detailed documentation of all validation methods 

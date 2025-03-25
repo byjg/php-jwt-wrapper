@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # Key Types
 
 The PHP JWT Wrapper supports two types of keys for signing and validating JWT tokens:
@@ -88,4 +92,9 @@ To set a specific algorithm:
 ```php
 $hmacSecret = new \ByJG\JwtWrapper\JwtHashHmacSecret($secret, true, 'HS384');
 $rsaKey = new \ByJG\JwtWrapper\JwtOpenSSLKey($privateKey, $publicKey, 'RS384');
-``` 
+```
+
+## See Also
+
+- [Creating Tokens](03-creating-tokens.md) - Learn how to use these keys to create JWT tokens
+- [Validating Tokens](04-validating-tokens.md) - Understand how to validate tokens using these keys 

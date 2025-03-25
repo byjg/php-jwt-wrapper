@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # PHP JWT Wrapper
 
 A simple and straightforward wrapper for the Firebase JWT library. This library makes it easy to create, encode, and decode JWT tokens in PHP applications.
@@ -34,4 +38,9 @@ The library is designed to be used on the server side for:
 2. **Token Validation**: Validate tokens received from clients
 3. **Data Extraction**: Extract data from validated tokens
 
-See the subsequent documentation sections for detailed usage examples. 
+See the subsequent documentation sections for detailed usage examples.
+
+## See Also
+
+- [Key Types](02-key-types.md) - Learn about the different types of keys supported by the library
+- [Creating Tokens](03-creating-tokens.md) - Step-by-step guide to creating JWT tokens 

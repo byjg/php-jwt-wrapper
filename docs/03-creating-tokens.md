@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # Creating JWT Tokens
 
 The JWT Wrapper makes it easy to create JWT tokens with proper claim structures. This document explains how to create tokens using the library.
@@ -119,4 +123,9 @@ $token = $jwtWrapper->generateToken($jwtData);
 
 // The token can now be sent to the client
 echo $token;
-``` 
+```
+
+## See Also
+
+- [Validating Tokens](04-validating-tokens.md) - Learn how to validate the tokens you create
+- [API Reference](05-api-reference.md) - Detailed documentation of all available methods 
