@@ -32,7 +32,7 @@ Creates a new JwtWrapper instance.
 - `$jwtKey`: The key implementation to use for signing and verification
 
 **Example:**
-```php
+```php title="Constructor"
 $wrapper = new JwtWrapper('example.com', $jwtKey);
 ```
 
@@ -50,7 +50,7 @@ Creates a JWT data array with standard claims.
 - An array containing the JWT data with standard claims
 
 **Example:**
-```php
+```php title="createJwtData()"
 $jwtData = $wrapper->createJwtData(['userId' => 123], 3600, 0, 'payload');
 ```
 
@@ -65,7 +65,7 @@ Generates a JWT token string from the given data.
 - A signed JWT token string
 
 **Example:**
-```php
+```php title="generateToken()"
 $token = $wrapper->generateToken($jwtData);
 ```
 
@@ -84,7 +84,7 @@ Extracts and validates data from a JWT token.
 - `JwtWrapperException`: If token validation fails
 
 **Example:**
-```php
+```php title="extractData()"
 $data = $wrapper->extractData($token);
 ```
 
@@ -99,7 +99,7 @@ Extracts the Bearer token from the HTTP Authorization header.
 - `JwtWrapperException`: If the Authorization header is missing or invalid
 
 **Example:**
-```php
+```php title="getAuthorizationBearer()"
 $token = $wrapper->getAuthorizationBearer();
 ```
 
@@ -114,7 +114,7 @@ Generates a random secret for use with HMAC algorithms.
 - A base64-encoded random string
 
 **Example:**
-```php
+```php title="generateSecret()"
 $secret = JwtWrapper::generateSecret(64);
 ```
 
@@ -126,7 +126,7 @@ Sets the leeway time for token validation to account for clock skew.
 - `$seconds`: The leeway in seconds
 
 **Example:**
-```php
+```php title="setLeeway()"
 $wrapper->setLeeway(30);
 ```
 
@@ -138,7 +138,7 @@ Gets the current leeway setting.
 - The current leeway in seconds
 
 **Example:**
-```php
+```php title="getLeeway()"
 $leeway = $wrapper->getLeeway();
 ```
 
@@ -184,7 +184,7 @@ Creates a new HMAC secret key.
 - `$algorithm`: The HMAC algorithm to use (default: 'HS512')
 
 **Example:**
-```php
+```php title="JwtHashHmacSecret Constructor"
 $secret = new JwtHashHmacSecret(base64_encode('my-secret'), true, 'HS256');
 ```
 
@@ -208,7 +208,7 @@ Creates a new OpenSSL key pair.
 - `$algorithm`: The RSA/ECDSA algorithm to use (default: 'RS512')
 
 **Example:**
-```php
+```php title="JwtOpenSSLKey Constructor"
 $key = new JwtOpenSSLKey($privateKeyPem, $publicKeyPem, 'RS256');
 ```
 
@@ -222,7 +222,7 @@ Exception thrown when JWT operations fail.
 
 ### Usage
 
-```php
+```php title="Exception Handling"
 try {
     $data = $wrapper->extractData($token);
 } catch (JwtWrapperException $e) {

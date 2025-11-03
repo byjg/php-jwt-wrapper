@@ -50,7 +50,7 @@ Detailed documentation:
 
 | Document                                          | Description                             |
 |---------------------------------------------------|-----------------------------------------|
-| [Overview](docs/01-overview.md)                   | Int roduction and core concepts         |
+| [Overview](docs/01-overview.md)                   | Introduction and core concepts          |
 | [Key Types](docs/02-key-types.md)                 | HMAC and OpenSSL key configuration      |
 | [Creating Tokens](docs/03-creating-tokens.md)     | Token generation and customization      |
 | [Validating Tokens](docs/04-validating-tokens.md) | Token validation and data extraction    |

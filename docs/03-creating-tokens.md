@@ -17,7 +17,7 @@ Creating a JWT token is a two-step process:
 
 First, initialize the JWT wrapper with your server name and key:
 
-```php
+```php title="Initialize JwtWrapper"
 // Using HMAC
 $server = "example.com";  // Your server name (issuer)
 $secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(base64_encode("your_secret_key"));
@@ -33,7 +33,7 @@ $jwtWrapper = new \ByJG\JwtWrapper\JwtWrapper($server, $jwtKey);
 
 Use the `createJwtData` method to create a payload with standard JWT claims:
 
-```php
+```php title="Create JWT Data"
 $jwtData = $jwtWrapper->createJwtData(
     [
         "userId" => 123,
@@ -47,12 +47,12 @@ $jwtData = $jwtWrapper->createJwtData(
 
 The resulting `$jwtData` will be an array containing:
 
-```php
+```php title="JWT Data Structure"
 [
     "iat" => 1234567890,              // Issued At timestamp
     "jti" => "base64_random_token_id", // JWT ID
     "iss" => "example.com",           // Issuer (your server name)
-    "nbf" => 1234567890,              // Not Before timestamp 
+    "nbf" => 1234567890,              // Not Before timestamp
     "exp" => 1234571490,              // Expiration timestamp
     "payload" => [                    // Your custom data
         "userId" => 123,
@@ -63,7 +63,7 @@ The resulting `$jwtData` will be an array containing:
 
 If you set the `$payloadKey` parameter to `null`, your data will not be wrapped:
 
-```php
+```php title="JWT Data Without Wrapping"
 $jwtData = $jwtWrapper->createJwtData(
     [
         "userId" => 123,
@@ -77,7 +77,7 @@ $jwtData = $jwtWrapper->createJwtData(
 
 This will result in:
 
-```php
+```php title="Unwrapped JWT Data Structure"
 [
     "iat" => 1234567890,
     "jti" => "base64_random_token_id",
@@ -93,7 +93,7 @@ This will result in:
 
 Convert the JWT data into a signed token string:
 
-```php
+```php title="Generate Token"
 $token = $jwtWrapper->generateToken($jwtData);
 ```
 
@@ -101,7 +101,7 @@ The `$token` is now a string that can be sent to clients, stored in cookies, etc
 
 ## Complete Example
 
-```php
+```php title="Complete Token Creation Example"
 <?php
 // Initialize the wrapper
 $server = "example.com";

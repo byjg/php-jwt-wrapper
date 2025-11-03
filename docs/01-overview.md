@@ -18,7 +18,7 @@ This library provides an abstraction layer over the Firebase JWT library with th
 
 ## Requirements
 
-- PHP 7.4 or higher
+- PHP 8.1 or higher
 - Firebase JWT library
 - OpenSSL extension
 

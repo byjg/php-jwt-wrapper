@@ -15,7 +15,7 @@ HMAC keys use a shared secret for both signing and verification. This is a simpl
 
 ### Creating an HMAC Secret Key
 
-```php
+```php title="Creating HMAC Secret Key"
 // Option 1: Create from a base64-encoded string
 $secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(base64_encode("your_secret_key"));
 
@@ -30,7 +30,7 @@ $secret = \ByJG\JwtWrapper\JwtHashHmacSecret::getInstance("your_secret_key");
 
 For production use, you should generate a secure random key:
 
-```php
+```php title="Generating Secure Secret"
 // Using the helper method
 $secretValue = \ByJG\JwtWrapper\JwtWrapper::generateSecret(64);
 
@@ -45,7 +45,7 @@ This approach is more secure as the verifying party only needs the public key, n
 
 ### Creating an OpenSSL Key Pair
 
-```php
+```php title="Creating OpenSSL Key Pair"
 // Option 1: Create from private and public key strings
 $jwtKey = new \ByJG\JwtWrapper\JwtOpenSSLKey($privateKeyString, $publicKeyString);
 
@@ -57,7 +57,7 @@ $jwtKey = \ByJG\JwtWrapper\JwtOpenSSLKey::getInstance($privateKeyString, $public
 
 You can generate an RSA key pair using the following commands:
 
-```bash
+```bash title="Generate RSA Key Pair"
 # Generate private key
 ssh-keygen -t rsa -C "Jwt RSA Key" -b 2048 -f private.pem
 
@@ -65,7 +65,9 @@ ssh-keygen -t rsa -C "Jwt RSA Key" -b 2048 -f private.pem
 openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 ```
 
-Note: When generating keys, do not set a password for the private key if it will be used in automated processes.
+:::caution
+When generating keys, do not set a password for the private key if it will be used in automated processes.
+:::
 
 ## Available Algorithms
 
@@ -89,7 +91,7 @@ The library supports the following algorithms:
 
 To set a specific algorithm:
 
-```php
+```php title="Setting Algorithm"
 $hmacSecret = new \ByJG\JwtWrapper\JwtHashHmacSecret($secret, true, 'HS384');
 $rsaKey = new \ByJG\JwtWrapper\JwtOpenSSLKey($privateKey, $publicKey, 'RS384');
 ```
