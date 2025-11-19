@@ -2,6 +2,8 @@
 
 namespace ByJG\JwtWrapper;
 
+use Override;
+
 class JwtOpenSSLKey implements JwtKeyInterface
 {
     use JwtAlgorithmTrait;
@@ -11,10 +13,11 @@ class JwtOpenSSLKey implements JwtKeyInterface
 
     /**
      * JwtRsaKey constructor.
-     * @param $private
-     * @param $public
+     * @param string $private
+     * @param string $public
+     * @param string $algorithm
      */
-    public function __construct($private, $public, $algorithm = 'RS512')
+    public function __construct(string $private, string $public, string $algorithm = 'RS512')
     {
         $this->private = $private;
         $this->public = $public;
@@ -33,11 +36,13 @@ class JwtOpenSSLKey implements JwtKeyInterface
         return new JwtOpenSSLKey($private, $public, $algorithm);
     }
 
+    #[Override]
     public function getPublicKey(): string
     {
         return $this->public;
     }
 
+    #[Override]
     public function getPrivateKey(): string
     {
         return $this->private;

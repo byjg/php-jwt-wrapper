@@ -9,7 +9,7 @@ trait JwtAlgorithmTrait
 {
     protected string $algorithm;
     protected string $algorithmType;
-    protected array$availableAlgorithms = [];
+    protected array $availableAlgorithms = [];
 
     protected function setAlgorithmType(string $type): void
     {
