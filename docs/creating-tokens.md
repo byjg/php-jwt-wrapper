@@ -127,5 +127,5 @@ echo $token;
 
 ## See Also
 
-- [Validating Tokens](04-validating-tokens.md) - Learn how to validate the tokens you create
-- [API Reference](05-api-reference.md) - Detailed documentation of all available methods 
+- [Validating Tokens](validating-tokens.md) - Learn how to validate the tokens you create
+- [API Reference](api-reference.md) - Detailed documentation of all available methods 

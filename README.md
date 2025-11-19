@@ -48,13 +48,13 @@ try {
 
 Detailed documentation:
 
-| Document                                          | Description                             |
-|---------------------------------------------------|-----------------------------------------|
-| [Overview](docs/01-overview.md)                   | Introduction and core concepts          |
-| [Key Types](docs/02-key-types.md)                 | HMAC and OpenSSL key configuration      |
-| [Creating Tokens](docs/03-creating-tokens.md)     | Token generation and customization      |
-| [Validating Tokens](docs/04-validating-tokens.md) | Token validation and data extraction    |
-| [API Reference](docs/05-api-reference.md)         | Complete class and method documentation |
+| Document                                       | Description                             |
+|------------------------------------------------|-----------------------------------------|
+| [Overview](docs/overview.md)                   | Introduction and core concepts          |
+| [Key Types](docs/key-types.md)                 | HMAC and OpenSSL key configuration      |
+| [Creating Tokens](docs/creating-tokens.md)     | Token generation and customization      |
+| [Validating Tokens](docs/validating-tokens.md) | Token validation and data extraction    |
+| [API Reference](docs/api-reference.md)         | Complete class and method documentation |
 
 
 ## Examples

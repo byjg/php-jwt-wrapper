@@ -98,5 +98,5 @@ $rsaKey = new \ByJG\JwtWrapper\JwtOpenSSLKey($privateKey, $publicKey, 'RS384');
 
 ## See Also
 
-- [Creating Tokens](03-creating-tokens.md) - Learn how to use these keys to create JWT tokens
-- [Validating Tokens](04-validating-tokens.md) - Understand how to validate tokens using these keys 
+- [Creating Tokens](creating-tokens.md) - Learn how to use these keys to create JWT tokens
+- [Validating Tokens](validating-tokens.md) - Understand how to validate tokens using these keys 

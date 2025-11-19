@@ -135,5 +135,5 @@ try {
 
 ## See Also
 
-- [Creating Tokens](03-creating-tokens.md) - Learn how to create the tokens you're validating
-- [API Reference](05-api-reference.md) - Detailed documentation of all validation methods 
+- [Creating Tokens](creating-tokens.md) - Learn how to create the tokens you're validating
+- [API Reference](api-reference.md) - Detailed documentation of all validation methods 
