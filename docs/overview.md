@@ -42,5 +42,5 @@ See the subsequent documentation sections for detailed usage examples.
 
 ## See Also
 
-- [Key Types](02-key-types.md) - Learn about the different types of keys supported by the library
-- [Creating Tokens](03-creating-tokens.md) - Step-by-step guide to creating JWT tokens 
+- [Key Types](key-types.md) - Learn about the different types of keys supported by the library
+- [Creating Tokens](creating-tokens.md) - Step-by-step guide to creating JWT tokens 
