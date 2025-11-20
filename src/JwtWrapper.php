@@ -8,12 +8,12 @@ use stdClass;
 
 class JwtWrapper
 {
-    const IssuedAt = 'iat';
-    const JsonTokenId = 'jti';
-    const Issuer = 'iss';
-    const NotBefore = 'nbf';
-    const Expire = 'exp';
-    const Subject = 'sub';
+    const string IssuedAt = 'iat';
+    const string JsonTokenId = 'jti';
+    const string Issuer = 'iss';
+    const string NotBefore = 'nbf';
+    const string Expire = 'exp';
+    const string Subject = 'sub';
 
     protected string $serverName;
 
