@@ -1,6 +1,6 @@
 {
   "name": "byjg/jwt-wrapper",
-  "description": "A very simple wrapper for create, encode, decode JWT Tokens and abstract the PHP JWT Component",
+  "description": "A simple and flexible wrapper around the Firebase JWT library that makes JWT token handling easy and intuitive in PHP applications",
   "autoload": {
     "psr-4": {
       "ByJG\\JwtWrapper\\": "src/"
@@ -12,17 +12,19 @@
     }
   },
   "require": {
-    "php": ">=8.1 <8.5",
+    "php": ">=8.1 <8.6",
     "firebase/php-jwt": "^6",
     "ext-openssl": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "^10.5|^11.5",
-    "vimeo/psalm": "^5.9|^6.2"
+    "phpunit/phpunit": "^9.6|^11.5",
+    "vimeo/psalm": "^5.9|^6.13"
   },
   "scripts": {
     "test": "vendor/bin/phpunit",
-    "psalm": "vendor/bin/psalm"
+    "psalm": "vendor/bin/psalm --threads=1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "prefer-stable": true,
+  "minimum-stability": "dev"
 }
