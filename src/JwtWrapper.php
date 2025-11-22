@@ -121,7 +121,8 @@ class JwtWrapper
     public function getAuthorizationBearer(): string
     {
         $authorization = $_SERVER['HTTP_AUTHORIZATION'] ?? "";
-        list($bearer) = sscanf($authorization, 'Bearer %s');
+        $result = sscanf($authorization, 'Bearer %s');
+        $bearer = $result[0] ?? "";
 
         if (empty($bearer)) {
             throw new JwtWrapperException('Absent authorization token');
