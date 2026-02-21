@@ -34,7 +34,7 @@ class JwtWrapperHashTest extends TestCase
     #[Override]
     protected function setUp(): void
     {
-        $this->jwtKey = JwtHashHmacSecret::getInstance("secrect_key_for_test", false);
+        $this->jwtKey = JwtHashHmacSecret::getInstance("secrect_key_for_test_that_is_long_enough_for_hs512_algorithm_works", false);
 
         unset($_SERVER["HTTP_AUTHORIZATION"]);
         $this->object = new JwtWrapper($this->server, $this->jwtKey);
@@ -174,7 +174,7 @@ class JwtWrapperHashTest extends TestCase
         $jwt = $this->object->createJwtData($this->dataToToken);
         $token = $this->object->generateToken($jwt);
 
-        $jwtWrapper = new JwtWrapper($this->server, new JwtHashHmacSecret("some_creepy_secret", true));
+        $jwtWrapper = new JwtWrapper($this->server, new JwtHashHmacSecret("some_other_creepy_secret_that_is_long_enough_for_hs512_algorithm", false));
 
         $jwtWrapper->extractData($token);
     }
