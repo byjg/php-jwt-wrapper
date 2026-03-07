@@ -1,3 +1,7 @@
+---
+tags: [php, cryptography, authentication]
+---
+
 # JWT Wrapper
 
 A simple and flexible wrapper around the Firebase JWT library that makes JWT token handling easy and intuitive in PHP applications.
@@ -51,11 +55,11 @@ Detailed documentation:
 
 | Document                                       | Description                             |
 |------------------------------------------------|-----------------------------------------|
-| [Overview](docs/overview.md)                   | Introduction and core concepts          |
-| [Key Types](docs/key-types.md)                 | HMAC and OpenSSL key configuration      |
-| [Creating Tokens](docs/creating-tokens.md)     | Token generation and customization      |
-| [Validating Tokens](docs/validating-tokens.md) | Token validation and data extraction    |
-| [API Reference](docs/api-reference.md)         | Complete class and method documentation |
+| [Overview](overview)                   | Introduction and core concepts          |
+| [Key Types](key-types)                 | HMAC and OpenSSL key configuration      |
+| [Creating Tokens](creating-tokens)     | Token generation and customization      |
+| [Validating Tokens](validating-tokens) | Token validation and data extraction    |
+| [API Reference](api-reference)         | Complete class and method documentation |
 
 
 ## Examples
