@@ -1,6 +1,12 @@
+---
+sidebar_key: jwt-wrapper
+tags: [php, cryptography, authentication]
+---
+
 # JWT Wrapper
 
 A simple and flexible wrapper around the Firebase JWT library that makes JWT token handling easy and intuitive in PHP applications.
+
 
 [![Sponsor](https://img.shields.io/badge/Sponsor-%23ea4aaa?logo=githubsponsors&logoColor=white&labelColor=0d1117)](https://github.com/sponsors/byjg)
 [![Build Status](https://github.com/byjg/php-jwt-wrapper/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/byjg/php-jwt-wrapper/actions/workflows/phpunit.yml)
