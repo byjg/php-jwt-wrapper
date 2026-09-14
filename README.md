@@ -12,7 +12,7 @@ A simple and flexible wrapper around the Firebase JWT library that makes JWT tok
 [![Build Status](https://github.com/byjg/php-jwt-wrapper/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/byjg/php-jwt-wrapper/actions/workflows/phpunit.yml)
 [![Opensource ByJG](https://img.shields.io/badge/opensource-byjg-success.svg)](http://opensource.byjg.com)
 [![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/php-jwt-wrapper/)
-[![GitHub license](https://img.shields.io/github/license/byjg/php-jwt-wrapper.svg)](https://opensource.byjg.com/opensource/licensing.html)
+[![GitHub license](https://img.shields.io/github/license/byjg/php-jwt-wrapper.svg)](https://opensource.byjg.com/license/)
 [![GitHub release](https://img.shields.io/github/release/byjg/php-jwt-wrapper.svg)](https://github.com/byjg/php-jwt-wrapper/releases/)
 
 ## Features
@@ -89,14 +89,6 @@ sequenceDiagram
 
 ```bash
 vendor/bin/phpunit
-```
-
-## Dependencies
-
-```mermaid  
-flowchart TD  
-    byjg/jwt-wrapper --> firebase/php-jwt
-    byjg/jwt-wrapper --> ext-openssl
 ```
 
 ----
