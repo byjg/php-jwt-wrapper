@@ -14,7 +14,8 @@ The library provides an easy way to validate tokens and extract their payload:
 <?php
 // Initialize the wrapper with the same server name and key used for creation
 $server = "example.com";
-$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(base64_encode("your_secret_key"));
+// Base64 of at least 64 random bytes, created once with JwtWrapper::generateSecret(64)
+$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(getenv("JWT_SECRET"));
 $jwtWrapper = new \ByJG\JwtWrapper\JwtWrapper($server, $secret);
 
 try {
@@ -89,7 +90,8 @@ Here's a complete example of token validation:
 <?php
 // Initialize the wrapper
 $server = "example.com";
-$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(base64_encode("your_secret_key"));
+// Base64 of at least 64 random bytes, created once with JwtWrapper::generateSecret(64)
+$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(getenv("JWT_SECRET"));
 $jwtWrapper = new \ByJG\JwtWrapper\JwtWrapper($server, $secret);
 
 // Optional: Set a leeway for clock skew
