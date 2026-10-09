@@ -16,22 +16,38 @@ HMAC keys use a shared secret for both signing and verification. This is a simpl
 ### Creating an HMAC Secret Key
 
 ```php title="Creating HMAC Secret Key"
-// Option 1: Create from a base64-encoded string
-$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(base64_encode("your_secret_key"));
+// Option 1: From a base64-encoded secret (the default)
+$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret($base64Secret);
 
-// Option 2: Create from an already base64-encoded string
-$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret("base64_encoded_secret", false);
+// Option 2: From the raw key bytes, without base64 decoding
+$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret($rawKeyBytes, false);
 
-// Option 3: Using the static factory method
-$secret = \ByJG\JwtWrapper\JwtHashHmacSecret::getInstance("your_secret_key");
+// Option 3: Using the static factory method (same arguments as the constructor)
+$secret = \ByJG\JwtWrapper\JwtHashHmacSecret::getInstance($base64Secret);
 ```
+
+### Key Length
+
+The key — after base64 decoding, unless `$decode` is `false` — must be at least as long as the
+hash the algorithm produces. A shorter key is rejected with `Provided key is too short` when a
+token is signed or validated:
+
+| Algorithm | Minimum key length |
+|---|---|
+| HS256 | 32 bytes |
+| HS384 | 48 bytes |
+| HS512 (default) | 64 bytes |
+
+A base64 string decodes to about three quarters of its length, so a default HS512 key is a
+base64 string of 88 characters. Use a random key, not a passphrase: `"your_secret_key"` is 15
+bytes and fails with every algorithm.
 
 ### Generating a Secure HMAC Secret
 
 For production use, you should generate a secure random key:
 
 ```php title="Generating Secure Secret"
-// Using the helper method
+// Using the helper method: 64 random bytes, base64 encoded — the length HS512 needs
 $secretValue = \ByJG\JwtWrapper\JwtWrapper::generateSecret(64);
 
 // Or using OpenSSL directly

@@ -3,6 +3,11 @@
   "description": "Just an example of JWT Wrapper",
   "license": "MIT",
   "require": {
-    "byjg/jwt-wrapper": "2.0.*"
+    "byjg/jwt-wrapper": "^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Example\\": "."
+    }
   }
 }

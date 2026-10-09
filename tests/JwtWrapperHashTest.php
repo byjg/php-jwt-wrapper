@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace Tests;
 
 use ByJG\JwtWrapper\JwtHashHmacSecret;
 use ByJG\JwtWrapper\JwtKeyInterface;

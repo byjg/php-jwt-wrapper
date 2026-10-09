@@ -179,13 +179,16 @@ Implementation of JwtKeyInterface for HMAC secrets.
 Creates a new HMAC secret key.
 
 **Parameters:**
-- `$key`: The secret key
+- `$key`: The secret key, base64 encoded unless `$decode` is `false`
 - `$decode`: Whether to base64 decode the key (default: true)
 - `$algorithm`: The HMAC algorithm to use (default: 'HS512')
 
+The decoded key must be at least 32 bytes for HS256, 48 for HS384 and 64 for HS512; a shorter
+one fails with `Provided key is too short`. See [Key Types](key-types.md#key-length).
+
 **Example:**
 ```php title="JwtHashHmacSecret Constructor"
-$secret = new JwtHashHmacSecret(base64_encode('my-secret'), true, 'HS256');
+$secret = new JwtHashHmacSecret(JwtWrapper::generateSecret(32), true, 'HS256');
 ```
 
 #### `static getInstance(string $key, bool $decode = true, string $algorithm = 'HS512'): JwtHashHmacSecret`
