@@ -99,11 +99,12 @@ The library supports the following algorithms:
 - RS384
 - RS512 (default)
 - ES256
+- ES256K
 - ES384
-- ES512
 - PS256
-- PS384
-- PS512
+
+The list comes from the Firebase JWT library (`JWT::$supported_algs`); call
+`availableAlgorithm()` on a key to get the algorithms it accepts.
 
 To set a specific algorithm:
 

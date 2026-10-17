@@ -52,8 +52,8 @@ $token = $jwtWrapper->generateToken(
 try {
     $jwtData = $jwtWrapper->extractData($token);
     $userId = $jwtData->data->userId;
-} catch (\ByJG\JwtWrapper\JwtWrapperException $e) {
-    // Handle invalid token
+} catch (\UnexpectedValueException | \ByJG\JwtWrapper\JwtWrapperException $e) {
+    // Handle invalid, expired or tampered token
 }
 ```
 

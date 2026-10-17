@@ -28,13 +28,18 @@ try {
 
     // The token is valid, proceed with the request
 
-} catch (\ByJG\JwtWrapper\JwtWrapperException $e) {
+} catch (\UnexpectedValueException | \ByJG\JwtWrapper\JwtWrapperException $e) {
     // Token is invalid, expired, or has been tampered with
     http_response_code(401); // Unauthorized
     echo json_encode(['error' => $e->getMessage()]);
     exit;
 }
 ```
+
+`JwtWrapperException` is thrown only when no token is found or the issuer does not match. An
+invalid signature, an expired token or a token not valid yet is reported by the Firebase JWT
+library with `SignatureInvalidException`, `ExpiredException` or `BeforeValidException`, all
+subclasses of `UnexpectedValueException`, so catch both.
 
 ## Automatic Extraction from HTTP Headers
 
@@ -50,7 +55,7 @@ try {
 
     // Process the data...
 
-} catch (\ByJG\JwtWrapper\JwtWrapperException $e) {
+} catch (\UnexpectedValueException | \ByJG\JwtWrapper\JwtWrapperException $e) {
     http_response_code(401);
     echo json_encode(['error' => $e->getMessage()]);
     exit;
@@ -122,7 +127,7 @@ try {
     // Process the authenticated request
     echo json_encode(['success' => true, 'userId' => $userId]);
 
-} catch (\ByJG\JwtWrapper\JwtWrapperException $e) {
+} catch (\UnexpectedValueException | \ByJG\JwtWrapper\JwtWrapperException $e) {
     // Token validation failed
     http_response_code(401);
     echo json_encode(['error' => 'Authentication failed', 'message' => $e->getMessage()]);

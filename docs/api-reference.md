@@ -81,7 +81,9 @@ Extracts and validates data from a JWT token.
 - A stdClass object containing the decoded token data
 
 **Throws:**
-- `JwtWrapperException`: If token validation fails
+- `JwtWrapperException`: If no token is given and the `Authorization` header has none, or if `$enforceIssuer` is true and the `iss` claim does not match the server name
+- `Firebase\JWT\SignatureInvalidException`, `Firebase\JWT\ExpiredException`, `Firebase\JWT\BeforeValidException`: If the signature is invalid, the token has expired, or it is not valid yet. They all extend `UnexpectedValueException`, which is also thrown for a malformed token
+- `DomainException`: If the key is invalid, e.g. `Provided key is too short`
 
 **Example:**
 ```php title="extractData()"
@@ -221,14 +223,15 @@ Static factory method to create a JwtOpenSSLKey instance.
 
 ## JwtWrapperException Class
 
-Exception thrown when JWT operations fail.
+Exception thrown when no bearer token is found or the issuer does not match. Signature, expiration
+and format errors are thrown by the Firebase JWT library as `UnexpectedValueException` subclasses.
 
 ### Usage
 
 ```php title="Exception Handling"
 try {
     $data = $wrapper->extractData($token);
-} catch (JwtWrapperException $e) {
+} catch (\UnexpectedValueException | JwtWrapperException $e) {
     // Handle the exception
     echo $e->getMessage();
 }
