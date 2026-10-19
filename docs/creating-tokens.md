@@ -20,7 +20,8 @@ First, initialize the JWT wrapper with your server name and key:
 ```php title="Initialize JwtWrapper"
 // Using HMAC
 $server = "example.com";  // Your server name (issuer)
-$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(base64_encode("your_secret_key"));
+// Base64 of at least 64 random bytes, created once with JwtWrapper::generateSecret(64)
+$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(getenv("JWT_SECRET"));
 $jwtWrapper = new \ByJG\JwtWrapper\JwtWrapper($server, $secret);
 
 // Or using OpenSSL
@@ -105,7 +106,8 @@ The `$token` is now a string that can be sent to clients, stored in cookies, etc
 <?php
 // Initialize the wrapper
 $server = "example.com";
-$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(base64_encode("your_secret_key"));
+// Base64 of at least 64 random bytes, created once with JwtWrapper::generateSecret(64)
+$secret = new \ByJG\JwtWrapper\JwtHashHmacSecret(getenv("JWT_SECRET"));
 $jwtWrapper = new \ByJG\JwtWrapper\JwtWrapper($server, $secret);
 
 // Create JWT data

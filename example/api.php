@@ -1,8 +1,11 @@
 <?php
 
-require "vendor/autoload.php";
+namespace Example;
 
-require_once "include.php";
+use Example\Classes\MyWrapper;
+use Exception;
+
+require "vendor/autoload.php";
 
 $easyJwt = MyWrapper::getWrapper();
 
@@ -13,4 +16,4 @@ try {
     die($ex->getMessage());
 }
 
-echo "{ 'data': 'value' }";
+echo '{ "data": "value" }';

@@ -81,7 +81,9 @@ Extracts and validates data from a JWT token.
 - A stdClass object containing the decoded token data
 
 **Throws:**
-- `JwtWrapperException`: If token validation fails
+- `JwtWrapperException`: If no token is given and the `Authorization` header has none, or if `$enforceIssuer` is true and the `iss` claim does not match the server name
+- `Firebase\JWT\SignatureInvalidException`, `Firebase\JWT\ExpiredException`, `Firebase\JWT\BeforeValidException`: If the signature is invalid, the token has expired, or it is not valid yet. They all extend `UnexpectedValueException`, which is also thrown for a malformed token
+- `DomainException`: If the key is invalid, e.g. `Provided key is too short`
 
 **Example:**
 ```php title="extractData()"
@@ -179,13 +181,16 @@ Implementation of JwtKeyInterface for HMAC secrets.
 Creates a new HMAC secret key.
 
 **Parameters:**
-- `$key`: The secret key
+- `$key`: The secret key, base64 encoded unless `$decode` is `false`
 - `$decode`: Whether to base64 decode the key (default: true)
 - `$algorithm`: The HMAC algorithm to use (default: 'HS512')
 
+The decoded key must be at least 32 bytes for HS256, 48 for HS384 and 64 for HS512; a shorter
+one fails with `Provided key is too short`. See [Key Types](key-types.md#key-length).
+
 **Example:**
 ```php title="JwtHashHmacSecret Constructor"
-$secret = new JwtHashHmacSecret(base64_encode('my-secret'), true, 'HS256');
+$secret = new JwtHashHmacSecret(JwtWrapper::generateSecret(32), true, 'HS256');
 ```
 
 #### `static getInstance(string $key, bool $decode = true, string $algorithm = 'HS512'): JwtHashHmacSecret`
@@ -218,14 +223,15 @@ Static factory method to create a JwtOpenSSLKey instance.
 
 ## JwtWrapperException Class
 
-Exception thrown when JWT operations fail.
+Exception thrown when no bearer token is found or the issuer does not match. Signature, expiration
+and format errors are thrown by the Firebase JWT library as `UnexpectedValueException` subclasses.
 
 ### Usage
 
 ```php title="Exception Handling"
 try {
     $data = $wrapper->extractData($token);
-} catch (JwtWrapperException $e) {
+} catch (\UnexpectedValueException | JwtWrapperException $e) {
     // Handle the exception
     echo $e->getMessage();
 }

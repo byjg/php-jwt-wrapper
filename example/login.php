@@ -1,7 +1,9 @@
 <?php
-require "vendor/autoload.php";
+namespace Example;
 
-require_once "include.php";
+use Example\Classes\MyWrapper;
+
+require "vendor/autoload.php";
 
 $easyJwt = MyWrapper::getWrapper();
 
