@@ -1,5 +1,6 @@
 ---
 sidebar_key: jwt-wrapper
+sidebar_category: http-apis
 tags: [php, cryptography, authentication]
 ---
 
