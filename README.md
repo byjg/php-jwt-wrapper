@@ -5,7 +5,7 @@ tags: [php, cryptography, authentication]
 
 # JWT Wrapper
 
-A simple and flexible wrapper around the Firebase JWT library that makes JWT token handling easy and intuitive in PHP applications.
+Create and validate JWT tokens in a few lines, with the same API for a shared secret or a key pair, and no weak keys accepted.
 
 
 [![Sponsor](https://img.shields.io/badge/Sponsor-%23ea4aaa?logo=githubsponsors&logoColor=white&labelColor=0d1117)](https://github.com/sponsors/byjg)
@@ -15,6 +15,26 @@ A simple and flexible wrapper around the Firebase JWT library that makes JWT tok
 [![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/php-jwt-wrapper/)
 [![GitHub license](https://img.shields.io/github/license/byjg/php-jwt-wrapper.svg)](https://opensource.byjg.com/license/)
 [![GitHub release](https://img.shields.io/github/release/byjg/php-jwt-wrapper.svg)](https://github.com/byjg/php-jwt-wrapper/releases/)
+
+## Why
+
+Signing a token is easy; getting the details right is not. Claims like `iat`, `exp` and `nbf`
+have to be set and checked, the token has to be read from the `Authorization` header, and a
+short HMAC secret silently makes every token easy to forge.
+
+JWT Wrapper takes care of them:
+
+```php
+$jwt = new JwtWrapper('example.com', new JwtHashHmacSecret(getenv('JWT_SECRET')));
+
+$token = $jwt->generateToken($jwt->createJwtData(['userId' => 123], 3600));
+$data  = $jwt->extractData();   // reads "Authorization: Bearer ..." and validates it
+```
+
+- **One API, two kinds of keys.** Swap `JwtHashHmacSecret` for `JwtOpenSSLKey` (RSA or
+  ECDSA) and nothing else changes.
+- **No weak secrets.** An HMAC secret shorter than the algorithm needs is refused, and
+  `generateSecret()` creates a proper one.
 
 ## Features
 
